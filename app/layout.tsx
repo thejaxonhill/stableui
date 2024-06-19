@@ -7,12 +7,16 @@ import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { Provider } from "../components/common";
 import Navbar from "../components/navbar/Navbar";
+import { redirect } from 'next/navigation';
 export const metadata: Metadata = {
   title: "Stability UI"
 };
 
 const RootLayout = async ({ children }: Readonly<{ children: React.ReactNode }>) => {
   const session = await getServerSession();
+  if (!session)
+    redirect("/api/auth/signin");
+
   return (
     <Provider
       session={session}
