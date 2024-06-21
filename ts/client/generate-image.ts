@@ -1,4 +1,4 @@
-enum AspectRatio {
+export enum AspectRatio {
     "16:9" = "16:9",
     "1:1" = "1:1",
     "21:9" = "21:9",
@@ -10,39 +10,39 @@ enum AspectRatio {
     "9:21" = "9:21"
 }
 
-enum OutputFormat {
-    JPEG = "jpeg",
+export enum OutputFormat {
     PNG ="png",
-    WEBP ="webp",
+    JPEG = "jpeg",
+    WEBP ="webp"
 }
 
-enum SD3Model {
+export enum SD3Model {
     Large = "sd3-large" ,
     LargeTurbo = "sd3-large-turbo",
     Medium = "sd3-medium"
 }
 
-enum StylePreset {
-    ThreeDModel = "3d-model",
-    AnalogFilm = "analog-film",
-    Anime = "anime",
-    Cinematic = "cinematic",
-    ComicBook = "comic-book",
-    DigitalArt = "digital-art",
-    Enhance = "enhance",
-    FantasyArt = "fantasy-art",
-    Isometric = "isometric",
-    LineArt = "line-art",
-    LowPoly = "low-poly",
-    ModelingCompound = "modeling-compound",
-    NeonPunk = "neon-punk",
-    Origami = "origami",
-    Photographic = "photographic",
-    PixelArt = "pixel-art",
-    TileTexture = "tile-texture",
+export enum StylePreset {
+    "3d Model" = "3d-model",
+    "Analog film" = "analog-film",
+    "Anime" = "anime",
+    "Cinematic" = "cinematic",
+    "Comic book" = "comic-book",
+    "Digital art" = "digital-art",
+    "Enhance" = "enhance",
+    "Fantasy art" = "fantasy-art",
+    "Isometric" = "isometric",
+    "Line art" = "line-art",
+    "Low poly" = "low-poly",
+    "Modeling compound" = "modeling-compound",
+    "Neon punk" = "neon-punk",
+    "Origami" = "origami",
+    "Photographic" = "photographic",
+    "Pixel art" = "pixel-art",
+    "Tile texture" = "tile-texture",
 }
 
-type GenerateImageParams = {
+export type GenerateImageParams = {
     prompt: string;
     aspectRatio?: AspectRatio;
     negativePrompt?: string;
@@ -50,17 +50,17 @@ type GenerateImageParams = {
     seed?: number
 };
 
-type GenerateImageCoreParams = GenerateImageParams & {
+export type GenerateImageCoreParams = GenerateImageParams & {
     stylePreset?: StylePreset;
 };
 
-type GenerateImageSD3Params = GenerateImageParams & {
+export type GenerateImageSD3Params = GenerateImageParams & {
     image?: File;
     model?: SD3Model;
     strength?: number;
 };
 
-type GenerateImageUltraParams = GenerateImageParams;
+export type GenerateImageUltraParams = GenerateImageParams;
 
 export const generateImageCore = async (request: GenerateImageCoreParams) => {
     return await generateImage("/api/generate/core", request);
