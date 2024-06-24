@@ -25,10 +25,7 @@ const RootLayout = async ({ children }: Readonly<{ children: React.ReactNode }>)
     ? CryptoJs.AES.decrypt(encryptedApiKey, secret).toString(CryptoJs.enc.Utf8)
     : undefined;
 
-  console.log(apiKey)
   const session = await getServerSession();
-  // if (!session)
-  //   redirect("/auth/signin");
 
   return (
     <Provider
