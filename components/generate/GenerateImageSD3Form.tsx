@@ -46,7 +46,7 @@ const GenerateImageSD3Form = ({ model }: GenerateImageSD3FormProps) => {
                         <MenuItem value={"sd3-large-turbo"}>Large Turbo</MenuItem>
                     </Select>
                 </FormControl>
-                <Button component='label'>
+                <Button component='label' variant='contained'>
                     <input
                         key={value.image?.name}
                         type='file'
