@@ -4,14 +4,18 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import DrawIcon from '@mui/icons-material/Draw';
 import EditIcon from '@mui/icons-material/Edit';
 import FitScreenIcon from '@mui/icons-material/FitScreen';
-import { AppBar, Box, Collapse, CssBaseline, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Collapse, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar, Typography } from "@mui/material";
 import { Session } from "next-auth";
 import Link from 'next/link';
 import { useState } from "react";
 import { SignInButton } from "../common";
+import AppsIcon from '@mui/icons-material/Apps';
 import AvatarMenu from "./AvatarMenu";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import CloseIcon from '@mui/icons-material/Close';
+import ThemeSwitch from '../common/ThemeSwitch';
 
 
 const drawerWidth = 240;
@@ -97,36 +101,42 @@ type NavbarProps = {
 
 const Navbar = ({ session }: NavbarProps) => {
     const [open, setOpen] = useState<number | null>(null);
+    const [drawerOpen, setDrawerOpen] = useState(false);
 
     return (
         <>
-            <CssBaseline />
             <AppBar position="fixed" elevation={0}>
                 <Toolbar>
-                    <Box sx={{ display: 'flex', flexGrow: 1, justifyContent: 'flex-end' }}>
-                        {session &&
-                            <AvatarMenu session={session} />
-                            ||
-                            <SignInButton color="inherit" />}
+                    <IconButton onClick={() => setDrawerOpen(true)} sx={{ color: 'inherit' }}>
+                        <AppsIcon fontSize='large' />
+                    </IconButton>
+                    <Box sx={{ display: 'flex', flexGrow: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
+                        <Stack direction='row' spacing={1}>
+                            <ThemeSwitch />
+                            {session &&
+                                <AvatarMenu session={session} />
+                                ||
+                                <SignInButton color="inherit" />}
+                        </Stack>
                     </Box>
                 </Toolbar>
             </AppBar >
             <Drawer
-                variant="permanent"
+                variant='persistent'
+                open={drawerOpen}
                 anchor="left"
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    '& .MuiDrawer-paper': {
-                        width: drawerWidth,
-                        boxSizing: 'border-box',
-                    },
-                }}
+                hideBackdrop
             >
                 <Toolbar >
-                    <Typography variant="h4" >
-                        Stable UI
-                    </Typography>
+                    <Stack spacing={2} direction='row'>
+                        <Typography variant="h4" >
+                            Stable UI
+                        </Typography>
+                        <IconButton onClick={() => setDrawerOpen(false)}>
+                            <CloseIcon />
+                        </IconButton>
+                    </Stack>
+
                 </Toolbar>
                 <Divider />
                 <List disablePadding component="nav">
@@ -155,6 +165,13 @@ const Navbar = ({ session }: NavbarProps) => {
                             </Collapse>
                         </>
                     )}
+                    <Divider />
+                    <ListItemButton LinkComponent={Link} href='https://github.com/thejaxonhill/stable-ui' target='_blank' rel='noreferrer'>
+                        <ListItemIcon>
+                            <GitHubIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={"GitHub Repo"} />
+                    </ListItemButton>
                 </List>
             </Drawer>
             <Toolbar />

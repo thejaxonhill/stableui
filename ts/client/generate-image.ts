@@ -1,6 +1,6 @@
 export enum AspectRatio {
-    "16:9" = "16:9",
     "1:1" = "1:1",
+    "16:9" = "16:9",
     "21:9" = "21:9",
     "2:3" = "2:3",
     "3:2" = "3:2",
@@ -16,11 +16,7 @@ export enum OutputFormat {
     WEBP ="webp"
 }
 
-export enum SD3Model {
-    Large = "sd3-large" ,
-    LargeTurbo = "sd3-large-turbo",
-    Medium = "sd3-medium"
-}
+export type SD3Model = "sd3-large" | "sd3-large-turbo" |"sd3-medium";
 
 export enum StylePreset {
     "3d Model" = "3d-model",
@@ -60,29 +56,57 @@ export type GenerateImageSD3Params = GenerateImageParams & {
     strength?: number;
 };
 
-export type GenerateImageUltraParams = GenerateImageParams;
+export type GenerateImageUltraParams = GenerateImageParams; 
 
-export const generateImageCore = async (request: GenerateImageCoreParams) => {
-    return await generateImage("/api/generate/core", request);
+export const generateImageCore = async (request: GenerateImageCoreParams, apiKey: string) => {
+    const formData = formDatawithBaseParams(request);
+    if(request.stylePreset)
+        formData.set("style_preset", request.stylePreset)
+    return await generateImage("/api/generate/core", formData, apiKey);
 }
 
-export const generateImageSD3 = async (request: GenerateImageSD3Params) => {
-    return await generateImage("/api/generate/sd3", request);
+export const generateImageSD3 = async (request: GenerateImageSD3Params, apiKey: string) => {
+    const formData = formDatawithBaseParams(request);
+    if(request.model)
+        formData.set("model", request.model);
+    if(request.image) {
+        formData.set("image", request.image);
+        formData.set("mode", "image-to-image");
+        formData.set("strength", request.strength ? String(request.strength) : '0');
+        formData.delete("aspect_ratio")
+    }
+    return await generateImage("/api/generate/sd3", formData, apiKey);
 }
 
-export const generateImageUltra = async (request: GenerateImageUltraParams) => {
-    return await generateImage("/api/generate/ultra", request);
+export const generateImageUltra = async (request: GenerateImageUltraParams, apiKey: string) => {
+    return await generateImage("/api/generate/ultra", formDatawithBaseParams(request), apiKey);
 }
 
-const generateImage = async <T extends GenerateImageParams> (endpoint: string, request: T) => {
+const generateImage = async (endpoint: string, formData: FormData, apiKey: string) => {
     return await fetch(endpoint, {
-        body: JSON.stringify(request),
+        body: formData,
         method: 'post',
         headers: {
-            "Accept": "image/*",
-            "Content-Type": "application/json",
+           "Accept": "image/*",
+            "Authorization": apiKey
         }
     })
-    .then(res => res.blob())
-    .then(blob => new File([blob], "image.png"))
+    .then(res => res.ok ? res.blob() : res.json())
+    .then(data => data instanceof Blob 
+        ? new File([data], (formData.get('prompt')?.toString()??'image') + '.' + (formData.get('output_format')?.toString()??'png')) 
+        : data.errors.reduce((e1: string, e2: string) => e1 + ',' + e2))
+}
+
+const formDatawithBaseParams = <T extends GenerateImageParams> (request: T) => {
+    const formData = new FormData();
+    formData.set("prompt", request.prompt);
+    if(request.aspectRatio)
+        formData.set("aspect_ratio", request.aspectRatio)
+    if(request.negativePrompt)
+        formData.set("negative_prompt", request.negativePrompt)
+    if(request.outputFormat)
+        formData.set("output_format", request.outputFormat.valueOf())
+    if(request.seed)
+        formData.set("seed", String(request.seed))
+    return formData;
 }
