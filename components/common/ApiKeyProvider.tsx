@@ -15,10 +15,9 @@ type ApiKeyProviderProps = {
 }
 
 const ApiKeyProvider = ({ apiKey, children }: ApiKeyProviderProps) => {
-    // const [apiKeyInternal, setApiKeyInternal] = useState(apiKey);
     const router = useRouter();
-    const [helperText, setHelperText] = useState<string | null>(null);
     const pathname = usePathname();
+    const [helperText, setHelperText] = useState<string | null>(null);
 
     const handleSetApiKey = async (key: string) => {
         setHelperText(null);
