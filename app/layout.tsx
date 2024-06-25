@@ -39,7 +39,7 @@ const RootLayout = async ({ children }: Readonly<{ children: React.ReactNode }>)
             <body>
               <Navbar session={session} />
               <main >
-                <Container maxWidth='lg' >
+                <Container maxWidth='lg' sx={{ mb: 5 }}>
                   <GlobalAlertHandler />
                   {children}
                 </Container>

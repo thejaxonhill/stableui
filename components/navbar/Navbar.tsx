@@ -130,13 +130,14 @@ const Navbar = ({ session }: NavbarProps) => {
                 <Toolbar >
                     <Stack spacing={2} direction='row'>
                         <Typography variant="h4" >
-                            Stable UI
+                            <Link href='/' style={{ textDecoration: 'none', color: 'inherit' }}>
+                                Stable UI
+                            </Link>
                         </Typography>
                         <IconButton onClick={() => setDrawerOpen(false)}>
                             <CloseIcon />
                         </IconButton>
                     </Stack>
-
                 </Toolbar>
                 <Divider />
                 <List disablePadding component="nav">
