@@ -1,11 +1,12 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
+import { Metadata } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+
+export const metadata: Metadata = {
+  title: 'Stable UI - Home'
+}
 
 const Home = async () => {
-
-  //redirect("/generate");
-
   return (
     <Box sx={{ mt: 5 }}>
       <Stack direction='column' spacing={2}>
@@ -26,7 +27,6 @@ const Home = async () => {
         </Button>
       </Box>
     </Box>
-
   )
 }
 

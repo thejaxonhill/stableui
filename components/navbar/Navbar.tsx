@@ -4,7 +4,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import DrawIcon from '@mui/icons-material/Draw';
 import EditIcon from '@mui/icons-material/Edit';
 import FitScreenIcon from '@mui/icons-material/FitScreen';
-import { AppBar, Box, Collapse, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Collapse, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar, Typography, useTheme } from "@mui/material";
 import { Session } from "next-auth";
 import Link from 'next/link';
 import { useState } from "react";
@@ -102,6 +102,7 @@ type NavbarProps = {
 const Navbar = ({ session }: NavbarProps) => {
     const [open, setOpen] = useState<number | null>(null);
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const theme = useTheme();
 
     return (
         <>
@@ -174,6 +175,14 @@ const Navbar = ({ session }: NavbarProps) => {
                         <ListItemText primary={"GitHub Repo"} />
                     </ListItemButton>
                 </List>
+                <Box sx={{ position: 'absolute', bottom: 0, width: '100%', p: 1, textAlign: 'center' }}>
+                    <Divider />
+                    <Box sx={{ mt: 1 }}>
+                        <Link href='/privacy' style={{ color: 'inherit' }}>
+                            Privacy policy
+                        </Link>
+                    </Box>
+                </Box>
             </Drawer>
             <Toolbar />
         </>

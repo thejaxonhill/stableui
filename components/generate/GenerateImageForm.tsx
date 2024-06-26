@@ -44,7 +44,7 @@ const GenerateImageForm = ({
         setLoading(false);
     }
 
-    const seedOkay = useMemo(() => !value.seed || typeof value.seed == 'number' && value.seed > 0 && value.seed < 4294967294, [value.seed]);
+    const seedOkay = useMemo(() => !value.seed || Number(value.seed) > 0 && Number(value.seed) < 4294967294, [value.seed]);
 
     return (
         <Box>
@@ -128,7 +128,7 @@ const GenerateImageForm = ({
                         value={value.seed} />
                 </Stack>
             </Collapse>
-            <ImageDisplay alt={value.prompt} image={image} onClear={() => setImage(null)} />
+            <ImageDisplay alt={value.prompt} image={image} onClear={() => setImage(null)} showSave />
         </Box >
     )
 }

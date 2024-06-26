@@ -5,10 +5,12 @@ import { useMemo } from 'react';
 type ImageDisplayProps = {
     alt: string;
     image?: File | null;
+    maxWidth?: number;
+    showSave?: boolean;
     onClear?: () => void
 }
 
-const ImageDisplay = ({ alt, image, onClear }: ImageDisplayProps) => {
+const ImageDisplay = ({ alt, image, maxWidth, showSave, onClear }: ImageDisplayProps) => {
     const src = useMemo(() => image ? URL.createObjectURL(image) : "", [image]);
     return (image &&
         <Box sx={{ mb: 2 }}>
@@ -21,25 +23,30 @@ const ImageDisplay = ({ alt, image, onClear }: ImageDisplayProps) => {
                     height={0}
                     style={{
                         width: '100%',
+                        maxWidth: maxWidth,
                         height: 'auto',
                         overflow: 'hidden',
                         borderRadius: ".2rem"
                     }} />
             </Box>
             <Stack direction='row' spacing={1}>
-                <Button onClick={async () => {
-                    await showSaveFilePicker({ suggestedName: image.name })
-                        .then(handle => handle.createWritable())
-                        .then(async writable => {
-                            await writable.write(image);
-                            writable.close();
-                        })
-                        .catch(ignored => { });
-                }}>
-                    Save Image As
-                </Button>
+                {showSave && screen && !!screen.orientation &&
+                    <Button
+                        variant='contained'
+                        onClick={async () => {
+                            await showSaveFilePicker({ suggestedName: image.name })
+                                .then(handle => handle.createWritable())
+                                .then(async writable => {
+                                    await writable.write(image);
+                                    writable.close();
+                                })
+                                .catch(ignored => { });
+                        }}>
+                        Save Image As
+                    </Button>
+                }
                 {onClear &&
-                    <Button onClick={onClear}>
+                    <Button onClick={onClear} variant='contained'>
                         Clear
                     </Button>
                 }

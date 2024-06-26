@@ -6,6 +6,7 @@ import { AspectRatio, GenerateImageSD3Params, OutputFormat, SD3Model, generateIm
 import GenerateImageForm from "./GenerateImageForm";
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { useRouter } from '../../ts/nextjs/navigation';
+import { ImageDisplay } from '../common';
 
 type GenerateImageSD3FormProps = {
     model?: string;
@@ -27,7 +28,7 @@ const GenerateImageSD3Form = ({ model }: GenerateImageSD3FormProps) => {
                 direction={{ xs: 'column', sm: 'row' }}
                 flexWrap="wrap"
                 useFlexGap
-                sx={{ mt: 2 }}>
+                sx={{ my: 2 }}>
                 <FormControl sx={{ minWidth: 150 }}>
                     <InputLabel>Model</InputLabel>
                     <Select
@@ -52,7 +53,6 @@ const GenerateImageSD3Form = ({ model }: GenerateImageSD3FormProps) => {
                         type='file'
                         hidden
                         accept='image/*'
-                        capture
                         onChange={e => {
                             const { files } = e.target;
                             if (files && files.length > 0)
@@ -60,30 +60,26 @@ const GenerateImageSD3Form = ({ model }: GenerateImageSD3FormProps) => {
                         }} />
                     Upload image
                 </Button>
-                {value.image &&
-                    <>
-                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Typography variant='h5'>
-                                {value.image.name}
-                            </Typography>
-                            <IconButton onClick={() => setValue({ ...value, image: undefined })}>
-                                <RemoveCircleOutlineIcon />
-                            </IconButton>
-                        </Box>
-                        <Box>
-                            <Typography variant='body2'>Strength: {value.strength ?? 0}</Typography>
-                            <Slider
-                                min={0}
-                                max={1}
-                                step={0.01}
-                                value={value.strength}
-                                size='small'
-                                onChange={(e, v) => setValue({ ...value, strength: v as number })}
-                                sx={{ minWidth: 100 }} />
-                        </Box>
-                    </>
-                }
             </Stack>
+            {value.image &&
+                <Box>
+                    <Typography variant='body2'>Strength: {value.strength ?? 0}</Typography>
+                    <Slider
+                        min={0}
+                        max={1}
+                        step={0.01}
+                        value={value.strength}
+                        size='small'
+                        onChange={(e, v) => setValue({ ...value, strength: v as number })}
+                        sx={{ minWidth: 100, maxWidth: 400 }} />
+                    <Typography>Reference image: </Typography>
+                    <ImageDisplay
+                        alt={"Reference Image"}
+                        image={value.image}
+                        onClear={() => setValue({ ...value, image: undefined })}
+                        maxWidth={400} />
+                </Box>
+            }
         </GenerateImageForm>
     )
 }

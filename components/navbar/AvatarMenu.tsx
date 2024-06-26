@@ -1,10 +1,9 @@
 "use client"
 
-import { Avatar, IconButton, Menu, MenuItem, Typography } from "@mui/material";
-import { SignOutMenuItem } from "../common";
+import { Avatar, IconButton, Menu, Typography } from "@mui/material";
 import { Session } from "next-auth";
 import { useState } from "react";
-import Link from "next/link";
+import { SignOutMenuItem } from "../common";
 
 type AvatarMenuProps = {
     session: Session
@@ -28,11 +27,6 @@ const AvatarMenu = ({ session }: AvatarMenuProps) => {
                         Sign out
                     </Typography>
                 </SignOutMenuItem>
-                <Link href="/privacy" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setAnchorEl(null)}>
-                    <MenuItem >
-                        Privacy policy
-                    </MenuItem>
-                </Link>
             </Menu>
         </>
     )

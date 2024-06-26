@@ -45,9 +45,7 @@ const PrivacyPolicy = () => {
 
             <h2>Contact Us</h2>
             <p>If you have any questions or concerns about this Privacy Policy or our privacy practices, please contact us at:</p>
-            <p>
-                Stable UI<br />
-                support@stableui.io<br /></p>
+            <p>support@stableui.io<br /></p>
             <p>Thank you for visiting Stable UI.</p>
         </Box>
     )
