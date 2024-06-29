@@ -35,7 +35,7 @@ This project uses OAuth configured through [NextAuth.js](https://next-auth.js.or
 
 Below is snippet of [app/auth/[...nextauth]/route.ts](https://github.com/thejaxonhill/stableui/blob/main/app/api/auth/%5B...nextauth%5D/route.ts), which has two providers. (This project currently uses Google or Discord and plans to add more). 
 
-<pre>
+```code
 import NextAuth from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
@@ -54,7 +54,7 @@ const handler = NextAuth({
 })
 
 export { handler as GET, handler as POST };
-</pre>
+```
 
 You can follow the instructions on [https://next-auth.js.org/](https://next-auth.js.org/) to set up providers of your choice. Once you have credentials for your chosen provider(s) using their services (e.g. [Google Cloud](https://console.cloud.google.com/apis/credentials), [Discord Deveolpers](https://discord.com/developers/applications)), create a .env.local file in the root of the project (this is ignored by git) and add the values required by your provider(s) as well as NEXTAUTH_SECRET with a secure value.<br>
 Example .env.local file
@@ -70,7 +70,7 @@ NEXTAUTH_SECRET=******
 
 ### Remove Authentication
 Start by deleting or changing the name of middleware.ts. Then change the file [app/auth/[...nextauth]/route.ts](https://github.com/thejaxonhill/stableui/blob/main/app/api/auth/%5B...nextauth%5D/route.ts) to the below code.
-<pre>
+```code
 import { NextRequest } from "next/server"
 import { cookies } from "next/headers";
 import CryptoJs from 'crypto-js';
@@ -104,14 +104,14 @@ export async function DELETE() {
   cookiesStore.delete("external-id");
   return new Response("Ok", {status: 200})
 }
-</pre>
+```
 
 Finally, remove the Provider component in the [app/layout.ts](https://github.com/thejaxonhill/stableui/blob/main/app/layout.tsx) file. 
 
 ## Running the app
 
 Prerequisites:
-* run "npm install"
+* run ```npm install```
 * Set up authentication or remove it (above).
 
 Run the development server:
