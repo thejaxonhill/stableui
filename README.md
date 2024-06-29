@@ -25,6 +25,7 @@ Below are the primary libraries being used:
 * [Next.js](https://nextjs.org/) - SSR, Routing, Fonts
 * [NextAuth.js](https://next-auth.js.org/) - Authentication
 * [Material UI](https://mui.com/) - Components, Theming
+* [Jest](https://jestjs.io/) - Testing
 
 ## Authentication
 This project uses OAuth configured through [NextAuth.js](https://next-auth.js.org/). You will need to do one of two things before running the server:

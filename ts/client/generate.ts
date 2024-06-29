@@ -1,20 +1,5 @@
-export enum AspectRatio {
-    "1:1" = "1:1",
-    "16:9" = "16:9",
-    "21:9" = "21:9",
-    "2:3" = "2:3",
-    "3:2" = "3:2",
-    "4:5" = "4:5",
-    "5:4" = "5:4",
-    "9:16" = "9:16",
-    "9:21" = "9:21"
-}
-
-export enum OutputFormat {
-    PNG ="png",
-    JPEG = "jpeg",
-    WEBP ="webp"
-}
+import { AspectRatio, OutputFormat } from "../types";
+import { ExtendedFormData as FormData } from "../components/extended-formdata";
 
 export type SD3Model = "sd3-large" | "sd3-large-turbo" |"sd3-medium";
 
@@ -67,8 +52,7 @@ export const generateImageCore = async (request: GenerateImageCoreParams, apiKey
 
 export const generateImageSD3 = async (request: GenerateImageSD3Params, apiKey: string) => {
     const formData = formDatawithBaseParams(request);
-    if(request.model)
-        formData.set("model", request.model);
+    formData.setIfPresent("model", request.model);
     if(request.image) {
         formData.set("image", request.image);
         formData.set("mode", "image-to-image");
@@ -99,14 +83,10 @@ const generateImage = async (endpoint: string, formData: FormData, apiKey: strin
 
 const formDatawithBaseParams = <T extends GenerateImageParams> (request: T) => {
     const formData = new FormData();
-    formData.set("prompt", request.prompt);
-    if(request.aspectRatio)
-        formData.set("aspect_ratio", request.aspectRatio)
-    if(request.negativePrompt)
-        formData.set("negative_prompt", request.negativePrompt)
-    if(request.outputFormat)
-        formData.set("output_format", request.outputFormat.valueOf())
-    if(request.seed)
-        formData.set("seed", String(request.seed))
+    formData.setIfPresent("prompt", request.prompt);
+    formData.setIfPresent("aspect_ratio", request.aspectRatio)
+    formData.setIfPresent("negative_prompt", request.negativePrompt)
+    formData.setIfPresent("output_format", request.outputFormat?.valueOf())
+    formData.setIfPresent("seed", request.seed ? String(request): undefined)
     return formData;
 }

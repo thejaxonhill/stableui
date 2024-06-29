@@ -1,0 +1,37 @@
+import { OutputFormat } from "../types";
+import {ExtendedFormData as FormData} from "../components/extended-formdata";
+
+export type UpscaleImageParams = {
+    prompt: string;
+    image: File;
+    negativePrompt?: string;
+    outputFormat?: OutputFormat;
+    seed?: number
+    creativity?: number
+};
+
+export const upscaleConservative = async (request: UpscaleImageParams, apiKey: string) => { 
+    return upscale("/v2beta/stable-image/upscale/conservative", request, apiKey);
+}
+
+const upscale = async (endpoint: string, request: UpscaleImageParams, apiKey: string) => {
+    const formData = new FormData();
+    formData.set("prompt", request.prompt);
+    formData.set("image", request.image);
+    formData.setIfPresent("negative_prompt", request.negativePrompt);
+    formData.setIfPresent("output_format", request.outputFormat?.valueOf());
+    formData.setIfPresent("seed", request.seed ? String(request.seed): undefined);
+    formData.setIfPresent("creativity", request.creativity ? String(request.creativity): undefined);
+    return await fetch(endpoint, {
+        body: formData,
+        method: 'post',
+        headers: {
+           "Accept": "image/*",
+            "Authorization": apiKey
+        }
+    })
+    .then(res => res.ok ? res.blob() : res.json())
+    .then(data => data instanceof Blob 
+        ? new File([data], (formData.get('prompt')?.toString()??'image') + '.' + (formData.get('output_format')?.toString()??'png')) 
+        : data.errors.reduce((e1: string, e2: string) => e1 + ',' + e2));
+}

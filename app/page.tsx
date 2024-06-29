@@ -1,12 +1,19 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { Metadata } from "next";
+import { getServerSession } from "next-auth";
+
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: 'Stable UI - Home'
 }
 
 const Home = async () => {
+  const session = await getServerSession();
+  if (session)
+    redirect('/generate/sd3?model=sd3-medium');
+
   return (
     <Box sx={{ mt: 5 }}>
       <Stack direction='column' spacing={2}>

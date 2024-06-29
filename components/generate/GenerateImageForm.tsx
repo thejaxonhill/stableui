@@ -2,13 +2,15 @@
 
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { LoadingButton } from '@mui/lab';
-import { Box, Collapse, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { Box, Collapse, IconButton, Stack, TextField, Typography } from "@mui/material";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useContext, useMemo, useState } from 'react';
-import { AspectRatio, GenerateImageParams, OutputFormat } from '../../ts/client/generate-image';
-import { ImageDisplay } from '../common';
+import { GenerateImageParams } from '../../ts/client/generate';
+import { AspectRatio, OutputFormat } from '../../ts/types';
+import { AspectRatioSelect, ImageDisplay, OutputFormatSelect, PromptField, SeedField, SubmitButton } from '../common';
 import { ApiKeyContext } from "../common/ApiKeyProvider";
+import { validatePrompt } from '../common/PromptField';
+import { validateSeed } from '../common/SeedField';
 
 type GenerateImageFormProps<T extends GenerateImageParams> = {
     children?: ReactNode;
@@ -31,58 +33,44 @@ const GenerateImageForm = ({
     const apiKey = useContext(ApiKeyContext);
     const [addtionalOptionsOpen, setAddtionalOptionsOpen] = useState(false);
     const [image, setImage] = useState<File | null>(null);
-    const [loading, setLoading] = useState(false);
 
     const handleGenerate = async () => {
-        setLoading(true);
-        console.log(apiKey)
         const image = await onSend(value, apiKey);
         if (image instanceof File)
             setImage(image);
         else if (image)
             router.replace(pathname + `?error=${image}`)
-        setLoading(false);
     }
 
-    const seedOkay = useMemo(() => !value.seed || Number(value.seed) > 0 && Number(value.seed) < 4294967294, [value.seed]);
+    const requestValid = useMemo(() => value.prompt
+        && validatePrompt(value.prompt)
+        && (!value.negativePrompt || validatePrompt(value.negativePrompt))
+        && (!value.seed || validateSeed(value.seed)), [value]);
 
     return (
-        <Box>
+        <form action={() => handleGenerate()}>
             <Stack
                 spacing={{ xs: 2, sm: 1 }}
                 direction={{ xs: 'column', sm: 'row' }}
                 flexWrap="wrap"
                 useFlexGap>
                 <Box sx={{ display: 'flex', flexGrow: 1 }}>
-                    <TextField
-                        onChange={e => onChange({ ...value, prompt: e.target.value })}
-                        fullWidth
-                        label="Prompt"
+                    <PromptField
                         required
+                        label="Prompt"
                         value={value.prompt}
-                    />
+                        onChange={e => onChange({ ...value, prompt: e.target.value })} />
                 </Box>
                 {!value.image &&
-                    <FormControl sx={{ minWidth: 100 }}>
-                        <InputLabel >Aspect Ratio</InputLabel>
-                        <Select
-                            value={value.aspectRatio}
-                            label="Aspect Ratio"
-                            onChange={e => onChange({ ...value, aspectRatio: e.target.value as AspectRatio })}
-                        >
-                            {Object.values(AspectRatio).map(k =>
-                                <MenuItem key={k} value={AspectRatio[k]}>{k}</MenuItem>)
-                            }
-                        </Select>
-                    </FormControl>
+                    <AspectRatioSelect
+                        value={value.aspectRatio}
+                        onChange={aspectRatio => onChange({ ...value, aspectRatio })} />
                 }
-                <LoadingButton
-                    disabled={!seedOkay}
-                    onClick={handleGenerate}
-                    loading={loading}
+                <SubmitButton
+                    disabled={!requestValid}
                     variant="contained">
                     Send
-                </LoadingButton>
+                </SubmitButton>
             </Stack>
             {children}
             <Box sx={{ display: 'flex', my: 1 }}>
@@ -96,7 +84,7 @@ const GenerateImageForm = ({
                 </IconButton>
             </Box>
             <Collapse in={addtionalOptionsOpen} >
-                <TextField
+                <PromptField
                     onChange={e => onChange({ ...value, negativePrompt: e.target.value })}
                     fullWidth
                     label="Negative prompt"
@@ -108,30 +96,16 @@ const GenerateImageForm = ({
                     flexWrap="wrap"
                     useFlexGap
                     sx={{ mb: 2 }} >
-                    <FormControl >
-                        <InputLabel >Output format</InputLabel>
-                        <Select
-                            value={value.outputFormat}
-                            label="Output format"
-                            onChange={e => onChange({ ...value, outputFormat: e.target.value as OutputFormat })}
-                        >
-                            {Object.values(OutputFormat).map(k =>
-                                <MenuItem key={k} value={k}>{k}</MenuItem>)
-                            }
-                        </Select>
-                    </FormControl>
-                    <TextField
-                        onChange={e => onChange({ ...value, seed: e.target.value })}
-                        label="Seed"
-                        placeholder="0 .. 4294967294"
-                        error={!seedOkay}
-                        helperText={!seedOkay && "Seed must be between 0 - 4294967294"}
+                    <OutputFormatSelect
+                        value={value.outputFormat}
+                        onChange={outputFormat => onChange({ ...value, outputFormat })} />
+                    <SeedField
                         value={value.seed}
-                    />
+                        onChange={e => onChange({ ...value, seed: e.target.value })} />
                 </Stack>
             </Collapse>
             <ImageDisplay alt={value.prompt} image={image} onClear={() => setImage(null)} showSave />
-        </Box >
+        </form >
     )
 }
 

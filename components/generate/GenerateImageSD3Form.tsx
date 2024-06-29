@@ -2,10 +2,11 @@
 
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, Slider, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
-import { AspectRatio, GenerateImageSD3Params, OutputFormat, SD3Model, generateImageSD3 } from '../../ts/client/generate-image';
+import { GenerateImageSD3Params, SD3Model, generateImageSD3 } from '../../ts/client/generate';
 import { useRouter } from '../../ts/nextjs/navigation';
 import { ImageDisplay } from '../common';
 import GenerateImageForm from "./GenerateImageForm";
+import { AspectRatio, OutputFormat } from '../../ts/types';
 
 type GenerateImageSD3FormProps = {
     model?: string;

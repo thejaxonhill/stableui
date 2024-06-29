@@ -1,4 +1,4 @@
-import { Box, Chip, Typography } from "@mui/material";
+import { Box, Chip, Stack, Typography } from "@mui/material";
 import { Metadata } from "next";
 import GenerateImageSD3Form from "../../../components/generate/GenerateImageSD3Form";
 
@@ -26,12 +26,18 @@ const GenerateSD3 = async ({ searchParams }: GenerateSD3Params) => {
 
     return (
         <Box sx={{ mt: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+            <Stack spacing={{ xs: 2, sm: 1 }}
+                direction={{ xs: 'column', sm: 'row' }}
+                flexWrap="wrap"
+                useFlexGap
+                sx={{ mb: 3 }}>
                 <Typography variant="h3" display='inline' sx={{ mr: 1 }}>
                     Stable Diffusion 3
                 </Typography>
-                <Chip label={creditCost + " credits"} variant="outlined" />
-            </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Chip label={creditCost + " credits"} variant="outlined" />
+                </Box>
+            </Stack>
             <GenerateImageSD3Form model={model} />
         </Box>
     )

@@ -1,9 +1,10 @@
 "use client"
 
 import { useState } from 'react';
-import { AspectRatio, GenerateImageCoreParams, OutputFormat, StylePreset, generateImageCore } from '../../ts/client/generate-image';
+import { GenerateImageCoreParams, StylePreset, generateImageCore } from '../../ts/client/generate';
 import GenerateImageForm from "./GenerateImageForm";
 import { FormControl, InputLabel, MenuItem, Select, Stack } from '@mui/material';
+import { AspectRatio, OutputFormat } from '../../ts/types';
 
 const GenerateImageCoreForm = () => {
     const [value, setValue] = useState<GenerateImageCoreParams>({
