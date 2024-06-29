@@ -20,7 +20,7 @@ Stable UI aims to provide a desktop and mobile friendly web UI for interacting w
     * [Structure](https://platform.stability.ai/docs/api-reference#tag/Control/paths/~1v2beta~1stable-image~1control~1structure/post)
 
 ## Technologies
-This project attempts to use minimal amount dependencies.<br>
+This project attempts to use a minimal amount of dependencies.<br>
 Below are the primary libraries being used:
 * [Next.js](https://nextjs.org/) - SSR, Routing, Fonts
 * [NextAuth.js](https://next-auth.js.org/) - Authentication
