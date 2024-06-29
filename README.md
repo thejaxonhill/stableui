@@ -27,13 +27,13 @@ Below are the primary libraries being used:
 * [Material UI](https://mui.com/) - Components, Theming
 
 ## Authentication
-This project uses OAuth configured through [NextAuth.js](https://next-auth.js.org/). You will need to do one of two things before running server:
+This project uses OAuth configured through [NextAuth.js](https://next-auth.js.org/). You will need to do one of two things before running the server:
 1. Set up an OAuth provider (Recommended)
 2. Remove authentication code
 
 ### Set up an OAuth provider
 
-Below is snippet of [app/auth/[...nextauth]/route.ts](https://github.com/thejaxonhill/stableui/blob/main/app/api/auth/%5B...nextauth%5D/route.ts), which has two providers. (This project currently uses Google or Discord and plans to add more). 
+Below is a snippet of [app/auth/[...nextauth]/route.ts](https://github.com/thejaxonhill/stableui/blob/main/app/api/auth/%5B...nextauth%5D/route.ts), which has two providers. (This project currently uses Google and Discord and plans to add more) 
 
 ```code
 import NextAuth from "next-auth";
@@ -56,7 +56,7 @@ const handler = NextAuth({
 export { handler as GET, handler as POST };
 ```
 
-You can follow the instructions on [https://next-auth.js.org/](https://next-auth.js.org/) to set up providers of your choice. Once you have credentials for your chosen provider(s) using their services (e.g. [Google Cloud](https://console.cloud.google.com/apis/credentials), [Discord Deveolpers](https://discord.com/developers/applications)), create a .env.local file in the root of the project (this is ignored by git) and add the values required by your provider(s) as well as NEXTAUTH_SECRET with a secure value.<br>
+You can follow the instructions on [https://next-auth.js.org/](https://next-auth.js.org/) to set up providers of your choice. Once you have created credentials for your chosen provider(s) using their services (e.g. [Google Cloud](https://console.cloud.google.com/apis/credentials), [Discord Developers](https://discord.com/developers/applications)), create a .env.local file in the root of the project (this is ignored by git) and add the values required by your provider(s) as well as NEXTAUTH_SECRET with a secure value.<br>
 Example .env.local file
 <pre>
 DISCORD_CLIENT_ID=******
@@ -66,7 +66,7 @@ GOOGLE_CLIENT_SECRET=******
 NEXTAUTH_SECRET=******
 </pre>
 
-***Do Not forget to configure your allowed redirect uris in your provider to allow, Discord's would be localhost:3000/api/auth/callback/discord***
+***Do Not forget to configure the allowed redirect uris in your provider's developer console. Discord's would be localhost:3000/api/auth/callback/discord***
 
 ### Remove Authentication
 Start by deleting or changing the name of middleware.ts. Then change the file [app/auth/[...nextauth]/route.ts](https://github.com/thejaxonhill/stableui/blob/main/app/api/auth/%5B...nextauth%5D/route.ts) to the below code.
