@@ -17,7 +17,7 @@ Stable UI aims to provide a desktop and mobile friendly web UI for interacting w
     * [Remove Background](https://platform.stability.ai/docs/api-reference#tag/Edit/paths/~1v2beta~1stable-image~1edit~1remove-background/post)
 * [Control](https://platform.stability.ai/docs/api-reference#tag/Control) (In Backlog)
     * [Sketch](https://platform.stability.ai/docs/api-reference#tag/Control/paths/~1v2beta~1stable-image~1control~1sketch/post)
-    * [Strcuture](https://platform.stability.ai/docs/api-reference#tag/Control/paths/~1v2beta~1stable-image~1control~1structure/post)
+    * [Structure](https://platform.stability.ai/docs/api-reference#tag/Control/paths/~1v2beta~1stable-image~1control~1structure/post)
 
 ## Technologies
 This project attempts to use minimal amount dependencies.<br>
