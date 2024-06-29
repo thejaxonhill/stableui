@@ -1,6 +1,7 @@
 import { Box, Chip, Stack, Typography } from "@mui/material";
 import { Metadata } from "next";
 import GenerateImageSD3Form from "../../../components/generate/GenerateImageSD3Form";
+import { SD3Model } from "../../../ts/client/generate";
 
 export const metadata: Metadata = {
     title: 'Stable UI - Generate - Stable Image Core'
@@ -14,15 +15,15 @@ type GenerateSD3Params = {
 
 const GenerateSD3 = async ({ searchParams }: GenerateSD3Params) => {
     const { model } = searchParams;
-    let creditCost = "6.5";
-    if (model)
+
+    const creditCost = (() => {
         switch (model) {
-            case "sd3-medium": creditCost = "3.5"
-                break;
-            case "sd3-large-turbo": creditCost = "4.5"
-                break;
-            case "sd3-large": creditCost = "6.5"
+            case "sd3-large": return "6.5"
+            case "sd3-large-turbo": return "4.5"
+            case "sd3-medium": return "3.5"
+            default: return "3.5"
         }
+    });
 
     return (
         <Box sx={{ mt: 3 }}>
@@ -35,10 +36,10 @@ const GenerateSD3 = async ({ searchParams }: GenerateSD3Params) => {
                     Stable Diffusion 3
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Chip label={creditCost + " credits"} variant="outlined" />
+                    <Chip label={creditCost() + " credits"} variant="outlined" />
                 </Box>
             </Stack>
-            <GenerateImageSD3Form model={model} />
+            <GenerateImageSD3Form model={model as SD3Model} />
         </Box>
     )
 }

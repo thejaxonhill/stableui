@@ -9,20 +9,23 @@ import GenerateImageForm from "./GenerateImageForm";
 import { AspectRatio, OutputFormat } from '../../ts/types';
 
 type GenerateImageSD3FormProps = {
-    model?: string;
+    model?: SD3Model;
 }
 
-const GenerateImageSD3Form = ({ model }: GenerateImageSD3FormProps) => {
+const GenerateImageSD3Form = ({ model = 'sd3-medium' }: GenerateImageSD3FormProps) => {
     const router = useRouter();
     const [value, setValue] = useState<GenerateImageSD3Params>({
         prompt: "",
         outputFormat: OutputFormat.PNG,
         aspectRatio: AspectRatio["1:1"],
-        model: model as SD3Model
+        model: model
     });
 
     return (
-        <GenerateImageForm value={value} onChange={r => setValue(r)} onSend={generateImageSD3} >
+        <GenerateImageForm
+            value={value}
+            onChange={r => setValue(r)}
+            onSend={generateImageSD3} >
             <Stack
                 spacing={{ xs: 2, sm: 1 }}
                 direction={{ xs: 'column', sm: 'row' }}
@@ -32,19 +35,16 @@ const GenerateImageSD3Form = ({ model }: GenerateImageSD3FormProps) => {
                 <FormControl sx={{ minWidth: 150 }}>
                     <InputLabel>Model</InputLabel>
                     <Select
-                        value={value?.model}
+                        value={value.model}
                         label="Model"
                         onChange={e => {
-                            const { value } = e.target
-                            if (value)
-                                router.set('model', e.target.value)
-                            else
-                                router.remove('model');
+                            const { value } = e.target;
+                            setValue(old => ({ ...old, model: value as SD3Model }));
+                            router.set('model', e.target.value);
                         }}>
-                        <MenuItem >None</MenuItem>
                         <MenuItem value={"sd3-medium"}>Medium</MenuItem>
-                        <MenuItem value={"sd3-large"}>Large</MenuItem>
                         <MenuItem value={"sd3-large-turbo"}>Large Turbo</MenuItem>
+                        <MenuItem value={"sd3-large"}>Large</MenuItem>
                     </Select>
                 </FormControl>
                 <Button component='label' variant='contained'>
