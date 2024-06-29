@@ -1,24 +1,21 @@
 "use client"
 
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import CloseIcon from '@mui/icons-material/Close';
 import DrawIcon from '@mui/icons-material/Draw';
 import EditIcon from '@mui/icons-material/Edit';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FitScreenIcon from '@mui/icons-material/FitScreen';
-import { AppBar, Box, Collapse, CssBaseline, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar, Typography, useTheme } from "@mui/material";
+import GitHubIcon from '@mui/icons-material/GitHub';
+import MenuIcon from '@mui/icons-material/Menu';
+import { AppBar, Box, Collapse, Divider, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar, Typography } from "@mui/material";
 import { Session } from "next-auth";
 import Link from 'next/link';
 import { useState } from "react";
 import { SignInButton } from "../common";
-import AppsIcon from '@mui/icons-material/Apps';
-import AvatarMenu from "./AvatarMenu";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import CloseIcon from '@mui/icons-material/Close';
 import ThemeSwitch from '../common/ThemeSwitch';
-
-
-const drawerWidth = 240;
+import AvatarMenu from "./AvatarMenu";
 
 const navComponents = [
     {
@@ -102,14 +99,13 @@ type NavbarProps = {
 const Navbar = ({ session }: NavbarProps) => {
     const [open, setOpen] = useState<number | null>(null);
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const theme = useTheme();
 
     return (
         <>
             <AppBar position="fixed" elevation={0}>
                 <Toolbar>
                     <IconButton onClick={() => setDrawerOpen(true)} sx={{ color: 'inherit' }}>
-                        <AppsIcon fontSize='large' />
+                        <MenuIcon fontSize='large' />
                     </IconButton>
                     <Box sx={{ display: 'flex', flexGrow: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
                         <Stack direction='row' spacing={1}>
@@ -143,15 +139,15 @@ const Navbar = ({ session }: NavbarProps) => {
                 <Divider />
                 <List disablePadding component="nav">
                     {navComponents.map((c, i) =>
-                        <>
-                            <ListItemButton key={c.title} onClick={() => setOpen(open === i ? null : i)}>
+                        <Box key={c.title}>
+                            <ListItemButton onClick={() => setOpen(open === i ? null : i)}>
                                 <ListItemIcon>
                                     {c.icon}
                                 </ListItemIcon>
                                 <ListItemText primary={c.title} />
                                 {open === i && <ExpandLessIcon /> || <ExpandMoreIcon />}
                             </ListItemButton>
-                            <Collapse in={open === i}>
+                            <Collapse in={open === i} timeout="auto" unmountOnExit>
                                 <Divider />
                                 <List component="div" disablePadding>
                                     {c.options.map(o =>
@@ -165,7 +161,7 @@ const Navbar = ({ session }: NavbarProps) => {
                                     )}
                                 </List>
                             </Collapse>
-                        </>
+                        </Box>
                     )}
                     <Divider />
                     <ListItemButton LinkComponent={Link} href='https://github.com/thejaxonhill/stable-ui' target='_blank' rel='noreferrer'>
@@ -175,15 +171,17 @@ const Navbar = ({ session }: NavbarProps) => {
                         <ListItemText primary={"GitHub Repo"} />
                     </ListItemButton>
                 </List>
-                <Box sx={{ position: 'absolute', bottom: 0, width: '100%', p: 1, textAlign: 'center' }}>
-                    <Divider />
-                    <Box sx={{ mt: 1 }}>
-                        <Link href='/privacy' style={{ color: 'inherit' }}>
-                            Privacy policy
-                        </Link>
+                <Box sx={{ display: 'flex', alignItems: 'end', height: '100%' }}>
+                    <Box sx={{ width: '100%', p: 1, textAlign: 'center' }}>
+                        <Divider />
+                        <Box sx={{ mt: 1 }}>
+                            <Link href='/privacy' style={{ color: 'inherit' }}>
+                                Privacy policy
+                            </Link>
+                        </Box>
                     </Box>
                 </Box>
-            </Drawer>
+            </Drawer >
             <Toolbar />
         </>
     )

@@ -1,12 +1,11 @@
 "use client"
 
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, Slider, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
-import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, Slider, Stack, Typography } from '@mui/material';
 import { AspectRatio, GenerateImageSD3Params, OutputFormat, SD3Model, generateImageSD3 } from '../../ts/client/generate-image';
-import GenerateImageForm from "./GenerateImageForm";
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { useRouter } from '../../ts/nextjs/navigation';
 import { ImageDisplay } from '../common';
+import GenerateImageForm from "./GenerateImageForm";
 
 type GenerateImageSD3FormProps = {
     model?: string;

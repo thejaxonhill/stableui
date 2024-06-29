@@ -5,7 +5,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { LoadingButton } from '@mui/lab';
 import { Box, Collapse, FormControl, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { usePathname, useRouter } from "next/navigation";
-import { ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useContext, useMemo, useState } from 'react';
 import { AspectRatio, GenerateImageParams, OutputFormat } from '../../ts/client/generate-image';
 import { ImageDisplay } from '../common';
 import { ApiKeyContext } from "../common/ApiKeyProvider";
@@ -106,7 +106,8 @@ const GenerateImageForm = ({
                     spacing={{ xs: 2, sm: 1 }}
                     direction={{ xs: 'column', sm: 'row' }}
                     flexWrap="wrap"
-                    useFlexGap>
+                    useFlexGap
+                    sx={{ mb: 2 }} >
                     <FormControl >
                         <InputLabel >Output format</InputLabel>
                         <Select
@@ -125,7 +126,8 @@ const GenerateImageForm = ({
                         placeholder="0 .. 4294967294"
                         error={!seedOkay}
                         helperText={!seedOkay && "Seed must be between 0 - 4294967294"}
-                        value={value.seed} />
+                        value={value.seed}
+                    />
                 </Stack>
             </Collapse>
             <ImageDisplay alt={value.prompt} image={image} onClear={() => setImage(null)} showSave />

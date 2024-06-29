@@ -9,6 +9,9 @@ const lightTheme = createTheme({
         primary: {
             main: '#6366F1'
         }
+    },
+    typography: {
+        fontFamily: 'inherit',
     }
 });
 
@@ -18,6 +21,9 @@ const darkTheme = createTheme({
         primary: {
             main: '#a6a7f7'
         }
+    },
+    typography: {
+        fontFamily: 'inherit',
     }
 });
 

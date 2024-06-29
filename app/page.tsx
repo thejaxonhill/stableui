@@ -16,9 +16,9 @@ const Home = async () => {
         <Typography variant="h4" textAlign='center' color='primary'>
           A free and open source tool for interacting with {
             <Link href='https://stability.ai/' style={{ color: 'inherit' }} target="_blank" rel="noreferrer">
-              Stability API
+              Stability AI
             </Link>
-          }
+          }&apos;s API
         </Typography>
       </Stack>
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>

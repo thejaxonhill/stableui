@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from 'react';
-import { AspectRatio, GenerateImageCoreParams, OutputFormat, generateImageCore, generateImageUltra } from '../../ts/client/generate-image';
+import { AspectRatio, GenerateImageCoreParams, OutputFormat, generateImageUltra } from '../../ts/client/generate-image';
 import GenerateImageForm from "./GenerateImageForm";
 
 const GenerateImageUltraForm = () => {

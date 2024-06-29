@@ -1,7 +1,6 @@
 import { Box, Chip, Typography } from "@mui/material";
 import { Metadata } from "next";
 import GenerateImageSD3Form from "../../../components/generate/GenerateImageSD3Form";
-import { SD3Model } from "../../../ts/client/generate-image";
 
 export const metadata: Metadata = {
     title: 'Stable UI - Generate - Stable Image Core'

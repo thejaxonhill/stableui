@@ -66,7 +66,7 @@ const ApiKeyProvider = ({ apiKey, children }: ApiKeyProviderProps) => {
                     </form>
                     <DialogContentText sx={{ mt: 1 }}>
                         You can access yours {
-                            <Link href={'https://platform.stability.ai/account/keys'} target="_blank" rel="noreferrer">
+                            <Link href={'https://platform.stability.ai/account/keys'} target="_blank" rel="noreferrer" style={{ color: 'inherit' }}>
                                 here
                             </Link>}.
                     </DialogContentText>
