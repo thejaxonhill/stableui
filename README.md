@@ -108,13 +108,13 @@ export async function DELETE() {
 
 Finally, remove the Provider component in the [app/layout.ts](https://github.com/thejaxonhill/stableui/blob/main/app/layout.tsx) file. 
 
-## Getting Started
+## Running the app
 
-This project 
+Prerequisites:
+* run "npm install"
+* Set up authentication or remove it (above).
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-First, run the development server:
+Run the development server:
 
 ```bash
 npm run dev
@@ -132,7 +132,7 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Roboto Mono, a custom Google Font.
 
-## Learn More
+### Learn More
 
 To learn more about Next.js, take a look at the following resources:
 
@@ -140,4 +140,3 @@ To learn more about Next.js, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
