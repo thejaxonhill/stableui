@@ -70,7 +70,7 @@ NEXTAUTH_SECRET=******
 ***Do Not forget to configure the allowed redirect uris in your provider's developer console. Discord's would be localhost:3000/api/auth/callback/discord***
 
 ### Remove Authentication
-Start by deleting or changing the name of middleware.ts. Then change the file [app/auth/[...nextauth]/route.ts](https://github.com/thejaxonhill/stableui/blob/main/app/api/auth/%5B...nextauth%5D/route.ts) to the below code.
+Start by deleting or changing the name of middleware.ts. Then change the file [app/auth/key/route.ts](https://github.com/thejaxonhill/stableui/blob/main/app/api/auth/key/route.ts) to the below code.
 ```code
 import { NextRequest } from "next/server"
 import { cookies } from "next/headers";
