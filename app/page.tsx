@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const Home = async () => {
   const session = await getServerSession();
   if (session)
-    redirect('/generate/sd3?model=sd3-medium');
+    redirect('/generate/sd3');
 
   return (
     <Box sx={{ mt: 5 }}>

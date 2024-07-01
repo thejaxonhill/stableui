@@ -1,4 +1,5 @@
 import { Box } from "@mui/material"
+import Link from "next/link";
 
 const PrivacyPolicy = () => {
     return (
@@ -7,7 +8,7 @@ const PrivacyPolicy = () => {
             <p><strong>Last Updated: June 24th, 2024</strong></p>
 
             <h2>Introduction</h2>
-            <p>{'Welcome to Stable UI ("we," "our," "us"). We are committed to protecting your privacy. This Privacy Policy explains how we handle your personal information when you visit our website and use our services at'} <a href="https://stableui.io">https://stableui.io</a>.</p>
+            <p>{'Welcome to Stable UI ("we," "our," "us"). We are committed to protecting your privacy. This Privacy Policy explains how we handle your personal information when you visit our website and use our services at'} <Link href="https://stableui.io" style={{ color: 'inherit' }}>https://stableui.io</Link>.</p>
 
             <h2>Information We Collect</h2>
 

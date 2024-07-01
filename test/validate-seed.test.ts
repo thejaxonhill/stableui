@@ -3,8 +3,12 @@ import { validateSeed } from '../components/common/SeedField'
  
 describe('Validate seed', () => {
 
-  it('given valid seed length then returns true', () => {
+  it('given valid seed then returns true', () => {
     expect(validateSeed("10")).toBeTruthy();
+  })
+
+  it('given 0 for seed then returns true', () => {
+    expect(validateSeed("0")).toBeTruthy();
   })
 
   it('given undefined seed then returns true', () => {

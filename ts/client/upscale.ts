@@ -3,21 +3,21 @@ import {ExtendedFormData as FormData} from "../components/extended-formdata";
 
 export type UpscaleImageParams = {
     prompt: string;
-    image: File;
+    image?: File;
     negativePrompt?: string;
     outputFormat?: OutputFormat;
-    seed?: number
-    creativity?: number
+    seed?: string;
+    creativity?: number;
 };
 
 export const upscaleConservative = async (request: UpscaleImageParams, apiKey: string) => { 
-    return upscale("/v2beta/stable-image/upscale/conservative", request, apiKey);
+    return upscale("/api/upscale/conservative", request, apiKey);
 }
 
 const upscale = async (endpoint: string, request: UpscaleImageParams, apiKey: string) => {
     const formData = new FormData();
     formData.set("prompt", request.prompt);
-    formData.set("image", request.image);
+    formData.setIfPresent("image", request.image);
     formData.setIfPresent("negative_prompt", request.negativePrompt);
     formData.setIfPresent("output_format", request.outputFormat?.valueOf());
     formData.setIfPresent("seed", request.seed ? String(request.seed): undefined);
@@ -33,5 +33,5 @@ const upscale = async (endpoint: string, request: UpscaleImageParams, apiKey: st
     .then(res => res.ok ? res.blob() : res.json())
     .then(data => data instanceof Blob 
         ? new File([data], (formData.get('prompt')?.toString()??'image') + '.' + (formData.get('output_format')?.toString()??'png')) 
-        : data.errors.reduce((e1: string, e2: string) => e1 + ',' + e2));
+        : data.errors.reduce((e1: string, e2: string) => e1 + ';' + e2));
 }

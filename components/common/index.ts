@@ -1,3 +1,4 @@
+import AdvancedOptions from "./AdvancedOptions";
 import ApiKeyProvider from "./ApiKeyProvider";
 import AspectRatioSelect from "./AspectRatioSelect";
 import GlobalAlertHandler from "./GlobalAlertHandler";
@@ -9,9 +10,11 @@ import SeedField from "./SeedField";
 import SignInButton from "./SignInButton";
 import SignOutMenuItem from "./SignOutMenuItem";
 import SubmitButton from "./SubmitButton";
+import TitleCard from "./TitleCard";
 import UnderConstruction from "./UnderConstruction";
 
 export {
+    AdvancedOptions,
     ApiKeyProvider,
     AspectRatioSelect,
     GlobalAlertHandler,
@@ -23,5 +26,6 @@ export {
     SignInButton,
     SignOutMenuItem,
     SubmitButton,
+    TitleCard,
     UnderConstruction
 }
