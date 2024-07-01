@@ -28,7 +28,7 @@ export type GenerateImageParams = {
     aspectRatio?: AspectRatio;
     negativePrompt?: string;
     outputFormat?: OutputFormat;
-    seed?: number
+    seed?: string
 };
 
 export type GenerateImageCoreParams = GenerateImageParams & {

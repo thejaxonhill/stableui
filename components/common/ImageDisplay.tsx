@@ -1,3 +1,5 @@
+"use client"
+
 import Image from 'next/image';
 import { Box, Button, Stack } from "@mui/material";
 import { useMemo } from 'react';

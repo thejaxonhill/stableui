@@ -21,7 +21,7 @@ const GenerateImageCoreForm = () => {
                 flexWrap="wrap"
                 useFlexGap
                 sx={{ mt: 2 }}>
-                <FormControl sx={{ minWidth: 150 }}>
+                <FormControl sx={{ minWidth: 170 }}>
                     <InputLabel >Style preset</InputLabel>
                     <Select
                         value={value?.stylePreset}
@@ -35,7 +35,6 @@ const GenerateImageCoreForm = () => {
                     </Select>
                 </FormControl>
             </Stack>
-
         </GenerateImageForm>
     )
 }

@@ -1,13 +1,11 @@
 "use client"
 
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Box, Collapse, IconButton, Stack, TextField, Typography } from "@mui/material";
-import { usePathname, useRouter } from "next/navigation";
+import { Box, Stack } from "@mui/material";
 import { ReactNode, useContext, useMemo, useState } from 'react';
 import { GenerateImageParams } from '../../ts/client/generate';
+import { useRouter } from '../../ts/nextjs/navigation';
 import { AspectRatio, OutputFormat } from '../../ts/types';
-import { AspectRatioSelect, ImageDisplay, OutputFormatSelect, PromptField, SeedField, SubmitButton } from '../common';
+import { AdvancedOptions, AspectRatioSelect, ImageDisplay, OutputFormatSelect, PromptField, SeedField, SubmitButton } from '../common';
 import { ApiKeyContext } from "../common/ApiKeyProvider";
 import { validatePrompt } from '../common/PromptField';
 import { validateSeed } from '../common/SeedField';
@@ -29,9 +27,7 @@ const GenerateImageForm = ({
     onChange,
     onSend }: GenerateImageFormProps<any>) => {
     const router = useRouter();
-    const pathname = usePathname();
     const apiKey = useContext(ApiKeyContext);
-    const [addtionalOptionsOpen, setAddtionalOptionsOpen] = useState(false);
     const [image, setImage] = useState<File | null>(null);
 
     const handleGenerate = async () => {
@@ -39,7 +35,7 @@ const GenerateImageForm = ({
         if (image instanceof File)
             setImage(image);
         else if (image)
-            router.replace(pathname + `?error=${image}`)
+            router.set('error', image)
     }
 
     const requestValid = useMemo(() => value.prompt
@@ -73,17 +69,7 @@ const GenerateImageForm = ({
                 </SubmitButton>
             </Stack>
             {children}
-            <Box sx={{ display: 'flex', my: 1 }}>
-                <Typography sx={{ my: 'auto', mr: 1 }}>
-                    Advanced
-                </Typography>
-                <IconButton
-                    size="small"
-                    onClick={() => setAddtionalOptionsOpen(!addtionalOptionsOpen)}>
-                    {addtionalOptionsOpen && <ExpandLessIcon /> || <ExpandMoreIcon />}
-                </IconButton>
-            </Box>
-            <Collapse in={addtionalOptionsOpen} >
+            <AdvancedOptions>
                 <PromptField
                     onChange={e => onChange({ ...value, negativePrompt: e.target.value })}
                     fullWidth
@@ -103,7 +89,7 @@ const GenerateImageForm = ({
                         value={value.seed}
                         onChange={e => onChange({ ...value, seed: e.target.value })} />
                 </Stack>
-            </Collapse>
+            </AdvancedOptions>
             <ImageDisplay alt={value.prompt} image={image} onClear={() => setImage(null)} showSave />
         </form >
     )

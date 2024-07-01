@@ -3,7 +3,7 @@
 import { TextField, TextFieldProps } from "@mui/material";
 import { useMemo } from "react";
 
-export const validateSeed = (value?: string) => !value || Number(value) > 0 && Number(value) < 4294967294;
+export const validateSeed = (value?: string) => !value || Number(value) >= 0 && Number(value) < 4294967294;
 
 type SeedFieldProps = Omit<TextFieldProps, 'value'> & {
     value?: string;

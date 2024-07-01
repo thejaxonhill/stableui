@@ -9,7 +9,7 @@ const GlobalAlertHandler = () => {
 
     const mapAlert = (key: AlertColor) =>
         <Alert severity={key} sx={{ my: 1 }} onClose={() => router.remove(key)}>
-            {searchParams.get(key)?.split(',').map(message => <Typography key={message}>{"- " + message}</Typography>)}
+            {searchParams.get(key)?.split(';').map(message => <Typography key={message}>{"- " + message}</Typography>)}
         </Alert>
 
     return (
@@ -18,9 +18,7 @@ const GlobalAlertHandler = () => {
             {searchParams.has("info") && mapAlert("info")}
             {searchParams.has("success") && mapAlert("success")}
             {searchParams.has("warning") && mapAlert("warning")}
-        </Box >
-
-
+        </Box>
     )
 }
 

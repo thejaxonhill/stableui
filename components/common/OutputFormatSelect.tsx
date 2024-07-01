@@ -1,3 +1,5 @@
+"use client"
+
 import { FormControl, InputLabel, MenuItem, Select, SelectProps } from "@mui/material"
 import { OutputFormat } from "../../ts/types";
 

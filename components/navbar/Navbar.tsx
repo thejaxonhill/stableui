@@ -12,10 +12,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Box, Collapse, Divider, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar, Typography } from "@mui/material";
 import { Session } from "next-auth";
 import Link from 'next/link';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SignInButton } from "../common";
 import ThemeSwitch from '../common/ThemeSwitch';
 import AvatarMenu from "./AvatarMenu";
+import { useRouter } from '../../ts/nextjs/navigation';
 
 const navComponents = [
     {
@@ -97,8 +98,13 @@ type NavbarProps = {
 }
 
 const Navbar = ({ session }: NavbarProps) => {
+    const { pathname } = useRouter();
     const [open, setOpen] = useState<number | null>(null);
     const [drawerOpen, setDrawerOpen] = useState(false);
+
+    useEffect(() => {
+        setDrawerOpen(false)
+    }, [pathname])
 
     return (
         <>
