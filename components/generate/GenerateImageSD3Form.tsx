@@ -63,6 +63,12 @@ const GenerateImageSD3Form = ({ model = 'sd3-medium' }: GenerateImageSD3FormProp
             </Stack>
             {value.image &&
                 <Box>
+                    <Typography>Reference image: </Typography>
+                    <ImageDisplay
+                        alt={"Reference Image"}
+                        image={value.image}
+                        onClear={() => setValue({ ...value, image: undefined })}
+                        maxWidth={400} />
                     <Typography variant='body2'>Strength: {value.strength ?? 0}</Typography>
                     <Slider
                         min={0}
@@ -72,12 +78,6 @@ const GenerateImageSD3Form = ({ model = 'sd3-medium' }: GenerateImageSD3FormProp
                         size='small'
                         onChange={(e, v) => setValue({ ...value, strength: v as number })}
                         sx={{ minWidth: 100, maxWidth: 400 }} />
-                    <Typography>Reference image: </Typography>
-                    <ImageDisplay
-                        alt={"Reference Image"}
-                        image={value.image}
-                        onClear={() => setValue({ ...value, image: undefined })}
-                        maxWidth={400} />
                 </Box>
             }
         </GenerateImageForm>

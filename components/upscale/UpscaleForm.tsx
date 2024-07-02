@@ -70,7 +70,7 @@ const UpscaleForm = ({ onSend }: UpscaleFormProps) => {
                         <SubmitButton
                             disabled={!requestValid}
                             variant="contained"
-                            sx={{ height: '100%' }}>
+                            sx={{ height: '100%', width: '100%' }}>
                             Send
                         </SubmitButton>
                     </span>
@@ -107,7 +107,7 @@ const UpscaleForm = ({ onSend }: UpscaleFormProps) => {
                         value={value.seed}
                         onChange={e => setValue({ ...value, seed: e.target.value })} />
                     <Box>
-                        <Typography variant='body2'>creativity: {value.creativity ?? 0}</Typography>
+                        <Typography variant='body2'>Creativity: {value.creativity ?? 0}</Typography>
                         <Slider
                             min={0.2}
                             max={0.5}
