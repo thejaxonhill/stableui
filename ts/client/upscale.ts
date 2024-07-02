@@ -10,11 +10,11 @@ export type UpscaleImageParams = {
     creativity?: number;
 };
 
-export const upscaleConservative = async (request: UpscaleImageParams, apiKey: string) => { 
-    return upscale("/api/upscale/conservative", request, apiKey);
+export const upscaleConservative = async (request: UpscaleImageParams) => { 
+    return upscale("/api/upscale/conservative", request);
 }
 
-const upscale = async (endpoint: string, request: UpscaleImageParams, apiKey: string) => {
+const upscale = async (endpoint: string, request: UpscaleImageParams) => {
     const formData = new FormData();
     formData.set("prompt", request.prompt);
     formData.setIfPresent("image", request.image);
@@ -25,10 +25,7 @@ const upscale = async (endpoint: string, request: UpscaleImageParams, apiKey: st
     return await fetch(endpoint, {
         body: formData,
         method: 'post',
-        headers: {
-           "Accept": "image/*",
-            "Authorization": apiKey
-        }
+        headers: { "Accept": "image/*" }
     })
     .then(res => res.ok ? res.blob() : res.json())
     .then(data => data instanceof Blob 

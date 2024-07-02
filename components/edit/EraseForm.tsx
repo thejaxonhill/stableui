@@ -1,16 +1,14 @@
 "use client"
 
 import { Box, Button, Slider, Stack, Tooltip, Typography } from "@mui/material";
-import { useContext, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { EraseParams, erase } from "../../ts/client/edit";
 import { useRouter } from "../../ts/nextjs/navigation";
 import { OutputFormat } from "../../ts/types";
 import { AdvancedOptions, ImageDisplay, OutputFormatSelect, SeedField, SubmitButton } from "../common";
-import { ApiKeyContext } from "../common/ApiKeyProvider";
 import { validateSeed } from "../common/SeedField";
 
 const EraseForm = () => {
-    const apiKey = useContext(ApiKeyContext);
     const router = useRouter();
     const [image, setImage] = useState<File | null>(null);
     const [value, setValue] = useState<EraseParams>({
@@ -21,7 +19,7 @@ const EraseForm = () => {
     const requestValid = useMemo(() => value.image && (!value.seed || validateSeed(value.seed)), [value]);
 
     const send = async () => {
-        const image = await erase(value, apiKey);
+        const image = await erase(value);
         if (image instanceof File)
             setImage(image);
         else if (image)

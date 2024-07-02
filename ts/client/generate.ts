@@ -43,14 +43,14 @@ export type GenerateImageSD3Params = GenerateImageParams & {
 
 export type GenerateImageUltraParams = GenerateImageParams; 
 
-export const generateImageCore = async (request: GenerateImageCoreParams, apiKey: string) => {
+export const generateImageCore = async (request: GenerateImageCoreParams) => {
     const formData = formDatawithBaseParams(request);
     if(request.stylePreset)
         formData.set("style_preset", request.stylePreset)
-    return await generateImage("/api/generate/core", formData, apiKey);
+    return await generateImage("/api/generate/core", formData);
 }
 
-export const generateImageSD3 = async (request: GenerateImageSD3Params, apiKey: string) => {
+export const generateImageSD3 = async (request: GenerateImageSD3Params) => {
     const formData = formDatawithBaseParams(request);
     formData.setIfPresent("model", request.model);
     if(request.image) {
@@ -59,21 +59,18 @@ export const generateImageSD3 = async (request: GenerateImageSD3Params, apiKey: 
         formData.set("strength", request.strength ? String(request.strength) : '0');
         formData.delete("aspect_ratio")
     }
-    return await generateImage("/api/generate/sd3", formData, apiKey);
+    return await generateImage("/api/generate/sd3", formData);
 }
 
-export const generateImageUltra = async (request: GenerateImageUltraParams, apiKey: string) => {
-    return await generateImage("/api/generate/ultra", formDatawithBaseParams(request), apiKey);
+export const generateImageUltra = async (request: GenerateImageUltraParams) => {
+    return await generateImage("/api/generate/ultra", formDatawithBaseParams(request));
 }
 
-const generateImage = async (endpoint: string, formData: FormData, apiKey: string) => {
+const generateImage = async (endpoint: string, formData: FormData) => {
     return await fetch(endpoint, {
         body: formData,
         method: 'post',
-        headers: {
-           "Accept": "image/*",
-            "Authorization": apiKey
-        }
+        headers: { "Accept": "image/*" }
     })
     .then(res => res.ok ? res.blob() : res.json())
     .then(data => data instanceof Blob 

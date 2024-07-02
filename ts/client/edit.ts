@@ -9,7 +9,7 @@ export type EraseParams = {
     seed?: string;
 };
 
-export const erase = async (request: EraseParams, apiKey: string) => {
+export const erase = async (request: EraseParams) => {
     const formData = new FormData();
     formData.setIfPresent("image", request.image);
     if(request.mask) {
@@ -22,10 +22,7 @@ export const erase = async (request: EraseParams, apiKey: string) => {
     return await fetch("/api/edit/erase", {
         body: formData,
         method: 'post',
-        headers: {
-           "Accept": "image/*",
-            "Authorization": apiKey
-        }
+        headers: { "Accept": "image/*" }
     })
     .then(res => res.ok ? res.blob() : res.json())
     .then(data => data instanceof Blob 

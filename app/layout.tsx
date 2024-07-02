@@ -2,7 +2,7 @@ import { Roboto_Mono } from 'next/font/google'
 import { Container } from "@mui/material";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
-import { ApiKeyProvider, GlobalAlertHandler, Provider } from "../components/common";
+import { ApiKeyDialog, GlobalAlertHandler, Provider } from "../components/common";
 import Navbar from "../components/navbar/Navbar";
 import { cookies } from "next/headers";
 import CryptoJs from 'crypto-js';
@@ -23,12 +23,7 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = async ({ children }: Readonly<{ children: React.ReactNode }>) => {
-  const cookieStore = cookies();
-  const encryptedApiKey = cookieStore.get('external-id')?.value;
-  const apiKey = encryptedApiKey
-    ? CryptoJs.AES.decrypt(encryptedApiKey, secret).toString(CryptoJs.enc.Utf8)
-    : undefined;
-
+  const hasKey = cookies().has('external-id');
   const session = await getServerSession();
 
   return (
@@ -39,17 +34,16 @@ const RootLayout = async ({ children }: Readonly<{ children: React.ReactNode }>)
     >
       <CustomThemeProvider>
         <html className={roboto.className}>
-          <ApiKeyProvider apiKey={apiKey}>
-            <body>
-              <Navbar session={session} />
-              <main >
-                <Container maxWidth='lg' sx={{ mb: 5 }}>
-                  <GlobalAlertHandler />
-                  {children}
-                </Container>
-              </main>
-            </body>
-          </ApiKeyProvider>
+          <ApiKeyDialog hasKey={hasKey} />
+          <body>
+            <Navbar session={session} />
+            <main >
+              <Container maxWidth='lg' sx={{ mb: 5 }}>
+                <GlobalAlertHandler />
+                {children}
+              </Container>
+            </main>
+          </body>
         </html>
       </CustomThemeProvider>
     </Provider >

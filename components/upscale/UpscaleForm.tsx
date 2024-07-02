@@ -1,21 +1,19 @@
 "use client"
 
 import { Box, Button, Slider, Stack, Tooltip, Typography } from "@mui/material";
-import { useContext, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { UpscaleImageParams } from "../../ts/client/upscale";
+import { useRouter } from "../../ts/nextjs/navigation";
 import { OutputFormat } from "../../ts/types";
 import { AdvancedOptions, ImageDisplay, OutputFormatSelect, PromptField, SeedField, SubmitButton } from "../common";
 import { validatePrompt } from "../common/PromptField";
 import { validateSeed } from "../common/SeedField";
-import { ApiKeyContext } from "../common/ApiKeyProvider";
-import { useRouter } from "../../ts/nextjs/navigation";
 
 type UpscaleFormProps = {
-    onSend: (r: UpscaleImageParams, apiKey: string) => Promise<File | string>;
+    onSend: (r: UpscaleImageParams) => Promise<File | string>;
 }
 
 const UpscaleForm = ({ onSend }: UpscaleFormProps) => {
-    const apiKey = useContext(ApiKeyContext);
     const router = useRouter();
     const [image, setImage] = useState<File | null>(null);
     const [value, setValue] = useState<UpscaleImageParams>({
@@ -31,7 +29,7 @@ const UpscaleForm = ({ onSend }: UpscaleFormProps) => {
         && (!value.seed || validateSeed(value.seed)), [value]);
 
     const handleUpscale = async () => {
-        const image = await onSend(value, apiKey);
+        const image = await onSend(value);
         if (image instanceof File)
             setImage(image);
         else if (image)

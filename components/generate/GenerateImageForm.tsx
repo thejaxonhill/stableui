@@ -1,12 +1,11 @@
 "use client"
 
 import { Box, Stack } from "@mui/material";
-import { ReactNode, useContext, useMemo, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 import { GenerateImageParams } from '../../ts/client/generate';
 import { useRouter } from '../../ts/nextjs/navigation';
 import { AspectRatio, OutputFormat } from '../../ts/types';
 import { AdvancedOptions, AspectRatioSelect, ImageDisplay, OutputFormatSelect, PromptField, SeedField, SubmitButton } from '../common';
-import { ApiKeyContext } from "../common/ApiKeyProvider";
 import { validatePrompt } from '../common/PromptField';
 import { validateSeed } from '../common/SeedField';
 
@@ -14,7 +13,7 @@ type GenerateImageFormProps<T extends GenerateImageParams> = {
     children?: ReactNode;
     value: T;
     onChange: (params: GenerateImageParams) => void;
-    onSend: (r: T, apiKey: string) => Promise<File | string>;
+    onSend: (r: T) => Promise<File | string>;
 }
 
 const GenerateImageForm = ({
@@ -27,11 +26,10 @@ const GenerateImageForm = ({
     onChange,
     onSend }: GenerateImageFormProps<any>) => {
     const router = useRouter();
-    const apiKey = useContext(ApiKeyContext);
     const [image, setImage] = useState<File | null>(null);
 
     const handleGenerate = async () => {
-        const image = await onSend(value, apiKey);
+        const image = await onSend(value);
         if (image instanceof File)
             setImage(image);
         else if (image)

@@ -1,5 +1,5 @@
 import AdvancedOptions from "./AdvancedOptions";
-import ApiKeyProvider from "./ApiKeyProvider";
+import ApiKeyDialog from "./ApiKeyDialog";
 import AspectRatioSelect from "./AspectRatioSelect";
 import GlobalAlertHandler from "./GlobalAlertHandler";
 import ImageDisplay from "./ImageDisplay";
@@ -15,7 +15,7 @@ import UnderConstruction from "./UnderConstruction";
 
 export {
     AdvancedOptions,
-    ApiKeyProvider,
+    ApiKeyDialog,
     AspectRatioSelect,
     GlobalAlertHandler,
     ImageDisplay,
