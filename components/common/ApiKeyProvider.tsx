@@ -37,7 +37,13 @@ const ApiKeyProvider = ({ apiKey, children }: ApiKeyProviderProps) => {
 
     return (
         <ApiKeyContext.Provider value={apiKey ?? ''}>
-            <Dialog open={!apiKey && pathname !== '/' && pathname !== '/privacy'} maxWidth="sm" fullWidth>
+            <Dialog open={!apiKey
+                && (pathname.includes('control')
+                    || pathname.includes('edit')
+                    || pathname.includes('generate')
+                    || pathname.includes('upscale'))}
+                maxWidth="sm"
+                fullWidth>
                 <DialogContent>
                     <DialogContentText sx={{ mb: 1 }}>
                         Please enter your api key:
