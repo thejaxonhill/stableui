@@ -1,25 +1,31 @@
 "use client"
 
-import { Stack, Tooltip } from "@mui/material";
+import { Box, Stack, Tooltip } from "@mui/material";
 import { useMemo, useState } from "react";
-import { EraseParams, erase } from "../../ts/client/edit";
+import { InpaintParams, inpaint } from "../../ts/client/edit";
 import { useRouter } from "../../ts/nextjs/navigation";
 import { OutputFormat } from "../../ts/types";
-import { AdvancedOptions, ImageDisplay, ImageInput, OutputFormatSelect, SeedField, SubmitButton, TitledImageDisplay, TitledSlider } from "../common";
+import { AdvancedOptions, ImageDisplay, ImageInput, OutputFormatSelect, PromptField, SeedField, SubmitButton, TitledImageDisplay, TitledSlider } from "../common";
+import { validatePrompt } from "../common/PromptField";
 import { validateSeed } from "../common/SeedField";
 
-const EraseForm = () => {
+const InpaintForm = () => {
     const router = useRouter();
     const [image, setImage] = useState<File | null>(null);
-    const [value, setValue] = useState<EraseParams>({
+    const [value, setValue] = useState<InpaintParams>({
+        prompt: '',
         growMask: 5,
         outputFormat: OutputFormat.PNG
     });
 
-    const requestValid = useMemo(() => value.image && (!value.seed || validateSeed(value.seed)), [value]);
+    const requestValid = useMemo(() => value.image
+        && value.prompt
+        && validatePrompt(value.prompt)
+        && (!value.negativePrompt || validatePrompt(value.negativePrompt))
+        && (!value.seed || validateSeed(value.seed)), [value]);
 
     const send = async () => {
-        const image = await erase(value);
+        const image = await inpaint(value);
         if (image instanceof File)
             setImage(image);
         else if (image)
@@ -34,12 +40,19 @@ const EraseForm = () => {
                 flexWrap="wrap"
                 useFlexGap
                 sx={{ mb: 2 }}>
+                <Box sx={{ display: 'flex', flexGrow: 1 }}>
+                    <PromptField
+                        required
+                        label="Prompt"
+                        value={value.prompt}
+                        onChange={e => setValue({ ...value, prompt: e.target.value })} />
+                </Box>
                 <ImageInput
                     key={value.image?.name}
                     onChange={file => setValue({ ...value, image: file })}>
                     Upload image *
                 </ImageInput>
-                <Tooltip title={!value.image && 'Image required for erase'} >
+                <Tooltip title={!value.image && 'Image required for inpaint'} >
                     <span>
                         <SubmitButton
                             disabled={!requestValid}
@@ -73,6 +86,12 @@ const EraseForm = () => {
                     flexWrap="wrap"
                     useFlexGap
                     sx={{ mb: 2 }} >
+                    <PromptField
+                        onChange={e => setValue({ ...value, negativePrompt: e.target.value })}
+                        fullWidth
+                        label="Negative prompt"
+                        value={value.negativePrompt}
+                        sx={{ mb: 2 }} />
                     <OutputFormatSelect
                         value={value.outputFormat}
                         onChange={outputFormat => setValue({ ...value, outputFormat: outputFormat as OutputFormat })} />
@@ -98,4 +117,4 @@ const EraseForm = () => {
     )
 }
 
-export default EraseForm;
+export default InpaintForm;

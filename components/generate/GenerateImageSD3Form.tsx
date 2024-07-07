@@ -1,12 +1,12 @@
 "use client"
 
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, Slider, Stack, Typography } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select, Stack } from '@mui/material';
 import { useState } from 'react';
 import { GenerateImageSD3Params, SD3Model, generateImageSD3 } from '../../ts/client/generate';
 import { useRouter } from '../../ts/nextjs/navigation';
-import { ImageDisplay } from '../common';
-import GenerateImageForm from "./GenerateImageForm";
 import { AspectRatio, OutputFormat } from '../../ts/types';
+import { ImageInput, TitledImageDisplay, TitledSlider } from '../common';
+import GenerateImageForm from "./GenerateImageForm";
 
 type GenerateImageSD3FormProps = {
     model?: SD3Model;
@@ -47,37 +47,26 @@ const GenerateImageSD3Form = ({ model = 'sd3-medium' }: GenerateImageSD3FormProp
                         <MenuItem value={"sd3-large"}>Large</MenuItem>
                     </Select>
                 </FormControl>
-                <Button component='label' variant='contained'>
-                    <input
-                        key={value.image?.name}
-                        type='file'
-                        hidden
-                        accept='image/*'
-                        onChange={e => {
-                            const { files } = e.target;
-                            if (files && files.length > 0)
-                                setValue({ ...value, image: files[0] })
-                        }} />
+                <ImageInput
+                    key={value.image?.name}
+                    onChange={file => setValue({ ...value, image: file })}>
                     Upload image
-                </Button>
+                </ImageInput>
             </Stack>
             {value.image &&
                 <Box>
-                    <Typography>Reference image: </Typography>
-                    <ImageDisplay
+                    <TitledImageDisplay
                         alt={"Reference Image"}
+                        title="Reference image:"
                         image={value.image}
-                        onClear={() => setValue({ ...value, image: undefined })}
-                        maxWidth={400} />
-                    <Typography variant='body2'>Strength: {value.strength ?? 0}</Typography>
-                    <Slider
+                        onClear={() => setValue({ ...value, image: undefined })} />
+                    <TitledSlider
                         min={0}
                         max={1}
                         step={0.01}
+                        title={`Strength: ${value.strength ?? 0}`}
                         value={value.strength}
-                        size='small'
-                        onChange={(e, v) => setValue({ ...value, strength: v as number })}
-                        sx={{ minWidth: 100, maxWidth: 400 }} />
+                        onChange={(e, v) => setValue({ ...value, strength: v as number })} />
                 </Box>
             }
         </GenerateImageForm>

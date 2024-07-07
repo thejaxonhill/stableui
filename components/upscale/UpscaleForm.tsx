@@ -1,11 +1,11 @@
 "use client"
 
-import { Box, Button, Slider, Stack, Tooltip, Typography } from "@mui/material";
+import { Box, Stack, Tooltip, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import { UpscaleImageParams } from "../../ts/client/upscale";
 import { useRouter } from "../../ts/nextjs/navigation";
 import { OutputFormat } from "../../ts/types";
-import { AdvancedOptions, ImageDisplay, OutputFormatSelect, PromptField, SeedField, SubmitButton } from "../common";
+import { AdvancedOptions, ImageDisplay, ImageInput, OutputFormatSelect, PromptField, SeedField, SubmitButton, TitledSlider } from "../common";
 import { validatePrompt } from "../common/PromptField";
 import { validateSeed } from "../common/SeedField";
 
@@ -50,20 +50,12 @@ const UpscaleForm = ({ onSend }: UpscaleFormProps) => {
                         value={value.prompt}
                         onChange={e => setValue({ ...value, prompt: e.target.value })} />
                 </Box>
-                <Button component='label' variant='contained' >
-                    <input
-                        key={value.image?.name}
-                        type='file'
-                        hidden
-                        accept='image/*'
-                        onChange={e => {
-                            const { files } = e.target;
-                            if (files && files.length > 0)
-                                setValue({ ...value, image: files[0] })
-                        }} />
+                <ImageInput
+                    key={value.image?.name}
+                    onChange={file => setValue({ ...value, image: file })}>
                     Upload image *
-                </Button>
-                <Tooltip title={!value.image && 'Image required for creative upscale'} >
+                </ImageInput>
+                <Tooltip title={!value.image && 'Image required for upscale'} >
                     <span>
                         <SubmitButton
                             disabled={!requestValid}
@@ -73,7 +65,6 @@ const UpscaleForm = ({ onSend }: UpscaleFormProps) => {
                         </SubmitButton>
                     </span>
                 </Tooltip>
-
             </Stack>
             {value.image &&
                 <Box>
@@ -104,17 +95,13 @@ const UpscaleForm = ({ onSend }: UpscaleFormProps) => {
                     <SeedField
                         value={value.seed}
                         onChange={e => setValue({ ...value, seed: e.target.value })} />
-                    <Box>
-                        <Typography variant='body2'>Creativity: {value.creativity ?? 0}</Typography>
-                        <Slider
-                            min={0.2}
-                            max={0.5}
-                            step={0.01}
-                            value={value.creativity}
-                            size='small'
-                            onChange={(e, v) => setValue({ ...value, creativity: v as number })}
-                            sx={{ minWidth: 100, maxWidth: 400 }} />
-                    </Box>
+                    <TitledSlider
+                        min={0.2}
+                        max={0.5}
+                        step={0.01}
+                        title={`Creativity: ${value.creativity ?? 0}`}
+                        value={value.creativity}
+                        onChange={(e, v) => setValue({ ...value, creativity: v as number })} />
                 </Stack>
             </AdvancedOptions>
             <ImageDisplay alt={value.prompt} image={image} onClear={() => setImage(null)} showSave />
