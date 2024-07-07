@@ -25,7 +25,9 @@ const AdvancedOptions = ({ children }: AdvancedOptionsProps) => {
                 </IconButton>
             </Box>
             <Collapse in={addtionalOptionsOpen} >
-                {children}
+                <Box sx={{ py: 1 }}>
+                    {children}
+                </Box>
             </Collapse>
         </>
     )

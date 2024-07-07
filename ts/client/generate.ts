@@ -84,6 +84,6 @@ const formDatawithBaseParams = <T extends GenerateImageParams> (request: T) => {
     formData.setIfPresent("aspect_ratio", request.aspectRatio)
     formData.setIfPresent("negative_prompt", request.negativePrompt)
     formData.setIfPresent("output_format", request.outputFormat?.valueOf())
-    formData.setIfPresent("seed", request.seed ? String(request): undefined)
+    formData.setIfPresent("seed", request.seed)
     return formData;
 }

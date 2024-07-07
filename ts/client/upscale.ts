@@ -20,7 +20,7 @@ const upscale = async (endpoint: string, request: UpscaleImageParams) => {
     formData.setIfPresent("image", request.image);
     formData.setIfPresent("negative_prompt", request.negativePrompt);
     formData.setIfPresent("output_format", request.outputFormat?.valueOf());
-    formData.setIfPresent("seed", request.seed ? String(request.seed): undefined);
+    formData.setIfPresent("seed", request.seed);
     formData.setIfPresent("creativity", request.creativity ? String(request.creativity): undefined);
     return await fetch(endpoint, {
         body: formData,
