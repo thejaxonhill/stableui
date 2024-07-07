@@ -1,6 +1,6 @@
 import { Box } from "@mui/material"
 import { Metadata } from "next"
-import { TitleCard, UnderConstruction } from "../../../components/common"
+import { TitleCard } from "../../../components/common"
 import EraseForm from "../../../components/edit/EraseForm"
 
 export const metadata: Metadata = {
@@ -12,7 +12,6 @@ const Erase = () => {
         <Box sx={{ mt: 3 }}>
             <TitleCard creditCost={3} title="Erase" />
             <EraseForm />
-            {/* <UnderConstruction /> */}
         </Box>
     )
 }

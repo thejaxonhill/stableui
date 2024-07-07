@@ -3,6 +3,7 @@ import ApiKeyDialog from "./ApiKeyDialog";
 import AspectRatioSelect from "./AspectRatioSelect";
 import GlobalAlertHandler from "./GlobalAlertHandler";
 import ImageDisplay from "./ImageDisplay";
+import ImageInput from "./ImageInput";
 import OutputFormatSelect from "./OutputFormatSelect";
 import PromptField from "./PromptField";
 import Provider from "./Provider";
@@ -11,6 +12,8 @@ import SignInButton from "./SignInButton";
 import SignOutMenuItem from "./SignOutMenuItem";
 import SubmitButton from "./SubmitButton";
 import TitleCard from "./TitleCard";
+import TitledImageDisplay from "./TitledImageDisplay";
+import TitledSlider from "./TitledSlider";
 import UnderConstruction from "./UnderConstruction";
 
 export {
@@ -19,6 +22,7 @@ export {
     AspectRatioSelect,
     GlobalAlertHandler,
     ImageDisplay,
+    ImageInput,
     OutputFormatSelect,
     PromptField,
     Provider,
@@ -27,5 +31,7 @@ export {
     SignOutMenuItem,
     SubmitButton,
     TitleCard,
+    TitledImageDisplay,
+    TitledSlider,
     UnderConstruction
 }
