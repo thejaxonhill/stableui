@@ -20,6 +20,7 @@ const OutpaintDirection = ({ direction, value, ...props }: OutpaintDirectionProp
             error={!isValid}
             helperText={!isValid && "Output direction must be between 0 - 2000"}
             value={value}
+            sx={{ flexGrow: 1 }}
             {...props}
         />
     )

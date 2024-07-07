@@ -70,23 +70,19 @@ const OutpaintForm = () => {
                 <OutpaintDirection
                     direction="left"
                     value={value.left}
-                    onChange={e => setValue({ ...value, left: e.target.value })}
-                    sx={{ flexGrow: 1 }} />
+                    onChange={e => setValue({ ...value, left: e.target.value })} />
                 <OutpaintDirection
                     direction="right"
                     value={value.right}
-                    onChange={e => setValue({ ...value, right: e.target.value })}
-                    sx={{ flexGrow: 1 }} />
+                    onChange={e => setValue({ ...value, right: e.target.value })} />
                 <OutpaintDirection
                     direction="up"
                     value={value.up}
-                    onChange={e => setValue({ ...value, up: e.target.value })}
-                    sx={{ flexGrow: 1 }} />
+                    onChange={e => setValue({ ...value, up: e.target.value })} />
                 <OutpaintDirection
                     direction="down"
                     value={value.down}
-                    onChange={e => setValue({ ...value, down: e.target.value })}
-                    sx={{ flexGrow: 1 }} />
+                    onChange={e => setValue({ ...value, down: e.target.value })} />
             </Stack>
             <Stack
                 spacing={{ xs: 0, sm: 2 }}
