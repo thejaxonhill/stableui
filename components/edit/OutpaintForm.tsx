@@ -44,29 +44,6 @@ const OutpaintForm = () => {
                 flexWrap="wrap"
                 useFlexGap
                 sx={{ mb: 2 }}>
-                <ImageInput
-                    key={value.image?.name}
-                    onChange={file => setValue({ ...value, image: file })}>
-                    Upload image *
-                </ImageInput>
-                <Tooltip title={!value.image && 'Image required for outpaint'
-                    || !value.left && !value.right && !value.up && !value.down && 'At least one outpaint direction is required'} >
-                    <span>
-                        <SubmitButton
-                            disabled={!requestValid}
-                            variant="contained"
-                            sx={{ height: '100%', width: '100%' }}>
-                            Send
-                        </SubmitButton>
-                    </span>
-                </Tooltip>
-            </Stack>
-            <Stack
-                spacing={{ xs: 2, sm: 1 }}
-                direction={{ xs: 'column', sm: 'row' }}
-                flexWrap="wrap"
-                useFlexGap
-                sx={{ mb: 2 }}>
                 <OutpaintDirection
                     direction="left"
                     value={value.left}
@@ -85,16 +62,33 @@ const OutpaintForm = () => {
                     onChange={e => setValue({ ...value, down: e.target.value })} />
             </Stack>
             <Stack
-                spacing={{ xs: 0, sm: 2 }}
+                spacing={{ xs: 2, sm: 1 }}
                 direction={{ xs: 'column', sm: 'row' }}
                 flexWrap="wrap"
-                useFlexGap>
-                <TitledImageDisplay
-                    alt={"Reference Image"}
-                    title="Reference image:"
-                    image={value.image}
-                    onClear={() => setValue({ ...value, image: undefined })} />
+                useFlexGap
+                sx={{ mb: 2 }}>
+                <ImageInput
+                    key={value.image?.name}
+                    onChange={file => setValue({ ...value, image: file })}>
+                    Upload image *
+                </ImageInput>
+                <Tooltip title={!value.image && 'Image required for outpaint'
+                    || !value.left && !value.right && !value.up && !value.down && 'At least one outpaint direction is required'} >
+                    <span>
+                        <SubmitButton
+                            disabled={!requestValid}
+                            variant="contained"
+                            sx={{ height: '100%', width: '100%' }}>
+                            Send
+                        </SubmitButton>
+                    </span>
+                </Tooltip>
             </Stack>
+            <TitledImageDisplay
+                alt={"Reference Image"}
+                title="Reference image:"
+                image={value.image}
+                onClear={() => setValue({ ...value, image: undefined })} />
             <AdvancedOptions>
                 <Stack
                     spacing={{ xs: 2, sm: 1 }}

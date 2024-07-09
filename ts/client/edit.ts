@@ -1,5 +1,6 @@
+import { ExtendedFormData as FormData } from "../components/extended-formdata";
 import { OutputFormat } from "../types";
-import {ExtendedFormData as FormData} from "../components/extended-formdata";
+import { checkResponse, mapImageToImage } from "./shared";
 
 export type EraseParams = {
     image?: File;
@@ -28,10 +29,8 @@ export const erase = async ({
         method: 'post',
         headers: { "Accept": "image/*" }
     })
-    .then(res => res.ok ? res.blob() : res.json())
-    .then(data => data instanceof Blob 
-        ? new File([data], (image?.name.replace(/\.[^/.]+$/, "")) + '.' + outputFormat ?? 'png') 
-        : data.errors.reduce((e1: string, e2: string) => e1 + ';' + e2));
+    .then(checkResponse)
+    .then(mapImageToImage(image!, outputFormat))
 }
 
 export type InpaintParams = {
@@ -67,10 +66,8 @@ export const inpaint = async ({
         method: 'post',
         headers: { "Accept": "image/*" }
     })
-    .then(res => res.ok ? res.blob() : res.json())
-    .then(data => data instanceof Blob 
-        ? new File([data], (image?.name.replace(/\.[^/.]+$/, "")) + '.' + outputFormat ?? 'png') 
-        : data.errors.reduce((e1: string, e2: string) => e1 + ';' + e2));
+    .then(checkResponse)
+    .then(mapImageToImage(image!, outputFormat))
 }
 
 export type OutpaintParams = {
@@ -103,7 +100,6 @@ export const outpaint = async ({
     formData.setIfPresent("right", right);
     formData.setIfPresent("up", up);
     formData.setIfPresent("down", down);
-    formData.setIfPresent("image", image);
     formData.setIfPresent("creativity", creativity ? String(creativity) : undefined);
     formData.setIfPresent("output_format", outputFormat?.valueOf());
     formData.setIfPresent("seed", seed);
@@ -113,8 +109,43 @@ export const outpaint = async ({
         method: 'post',
         headers: { "Accept": "image/*" }
     })
-    .then(res => res.ok ? res.blob() : res.json())
-    .then(data => data instanceof Blob 
-        ? new File([data], (image?.name.replace(/\.[^/.]+$/, "")) + '.' + outputFormat ?? 'png') 
-        : data.errors.reduce((e1: string, e2: string) => e1 + ';' + e2));
+    .then(checkResponse)
+    .then(mapImageToImage(image!, outputFormat))
+}
+
+export type SearchAndReplaceParams = {
+    prompt: string;
+    searchPrompt: string
+    image?: File;
+    growMask?: number,
+    outputFormat?: OutputFormat;
+    negativePrompt?: string;
+    seed?: string;
+};
+
+export const searchAndReplace = async ({
+    prompt,
+    searchPrompt,
+    image,
+    growMask,
+    outputFormat,
+    negativePrompt,
+    seed,
+}: SearchAndReplaceParams) => {
+    const formData = new FormData();
+    formData.set("prompt", prompt);
+    formData.set("search_prompt", searchPrompt)
+    formData.setIfPresent("image", image);
+    formData.setIfPresent("grow_mask", growMask ? String(growMask) : undefined);
+    formData.setIfPresent("output_format", outputFormat?.valueOf());
+    formData.setIfPresent("negative_prompt", negativePrompt);
+    formData.setIfPresent("seed", seed);
+    
+    return await fetch("/api/edit/search-and-replace", {
+        body: formData,
+        method: 'post',
+        headers: { "Accept": "image/*" }
+    })
+    .then(checkResponse)
+    .then(mapImageToImage(image!, outputFormat));
 }

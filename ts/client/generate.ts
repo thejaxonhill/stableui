@@ -1,5 +1,6 @@
-import { AspectRatio, OutputFormat } from "../types";
 import { ExtendedFormData as FormData } from "../components/extended-formdata";
+import { AspectRatio, OutputFormat } from "../types";
+import { checkResponse, mapPromptToImage } from "./shared";
 
 export type SD3Model = "sd3-large" | "sd3-large-turbo" |"sd3-medium";
 
@@ -72,15 +73,15 @@ const generateImage = async (endpoint: string, formData: FormData) => {
         method: 'post',
         headers: { "Accept": "image/*" }
     })
-    .then(res => res.ok ? res.blob() : res.json())
-    .then(data => data instanceof Blob 
-        ? new File([data], (formData.get('prompt')?.toString()??'image') + '.' + (formData.get('output_format')?.toString()??'png')) 
-        : data.errors.reduce((e1: string, e2: string) => e1 + ',' + e2))
+    .then(checkResponse)
+    .then(mapPromptToImage(formData.has('prompt') 
+    ? formData.get('prompt')?.toString()! 
+    : 'image', formData.get('output_format')?.toString() as OutputFormat))
 }
 
 const formDatawithBaseParams = <T extends GenerateImageParams> (request: T) => {
     const formData = new FormData();
-    formData.setIfPresent("prompt", request.prompt);
+    formData.set("prompt", request.prompt);
     formData.setIfPresent("aspect_ratio", request.aspectRatio)
     formData.setIfPresent("negative_prompt", request.negativePrompt)
     formData.setIfPresent("output_format", request.outputFormat?.valueOf())

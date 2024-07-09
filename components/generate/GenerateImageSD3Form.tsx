@@ -18,6 +18,7 @@ const GenerateImageSD3Form = ({ model = 'sd3-medium' }: GenerateImageSD3FormProp
         prompt: "",
         outputFormat: OutputFormat.PNG,
         aspectRatio: AspectRatio["1:1"],
+        strength: .5,
         model: model
     });
 
