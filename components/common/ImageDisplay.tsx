@@ -7,7 +7,7 @@ import { useMemo } from 'react';
 export type ImageDisplayProps = {
     alt: string;
     image?: File | null;
-    maxWidth?: number;
+    maxWidth?: number | string;
     showSave?: boolean;
     onClear?: () => void
 }

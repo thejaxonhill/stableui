@@ -1,5 +1,6 @@
 import { OutputFormat } from "../types";
 import {ExtendedFormData as FormData} from "../components/extended-formdata";
+import { checkResponse, mapImageToImage } from "./shared";
 
 export type UpscaleImageParams = {
     prompt: string;
@@ -27,8 +28,6 @@ const upscale = async (endpoint: string, request: UpscaleImageParams) => {
         method: 'post',
         headers: { "Accept": "image/*" }
     })
-    .then(res => res.ok ? res.blob() : res.json())
-    .then(data => data instanceof Blob 
-        ? new File([data], (formData.get('prompt')?.toString()??'image') + '.' + (formData.get('output_format')?.toString()??'png')) 
-        : data.errors.reduce((e1: string, e2: string) => e1 + ';' + e2));
+    .then(checkResponse)
+    .then(mapImageToImage(request.image!, request.outputFormat));
 }

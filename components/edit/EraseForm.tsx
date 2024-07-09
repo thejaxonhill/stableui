@@ -51,7 +51,7 @@ const EraseForm = () => {
                 </Tooltip>
             </Stack>
             <Stack
-                spacing={{ xs: 0, sm: 2 }}
+                spacing={{ xs: 0, sm: 3 }}
                 direction={{ xs: 'column', sm: 'row' }}
                 flexWrap="wrap"
                 useFlexGap>

@@ -1,31 +1,32 @@
 "use client"
 
-import { Box, Stack, Tooltip } from "@mui/material";
+import { Stack, Tooltip } from "@mui/material";
 import { useMemo, useState } from "react";
-import { InpaintParams, inpaint } from "../../ts/client/edit";
+import { searchAndReplace, SearchAndReplaceParams } from "../../ts/client/edit";
 import { useRouter } from "../../ts/nextjs/navigation";
 import { OutputFormat } from "../../ts/types";
 import { AdvancedOptions, ImageDisplay, ImageInput, OutputFormatSelect, PromptField, SeedField, SubmitButton, TitledImageDisplay, TitledSlider } from "../common";
 import { validatePrompt } from "../common/PromptField";
 import { validateSeed } from "../common/SeedField";
 
-const InpaintForm = () => {
+const SearchAndReplaceForm = () => {
     const router = useRouter();
     const [image, setImage] = useState<File | null>(null);
-    const [value, setValue] = useState<InpaintParams>({
+    const [value, setValue] = useState<SearchAndReplaceParams>({
         prompt: '',
-        growMask: 5,
+        searchPrompt: '',
+        growMask: 3,
         outputFormat: OutputFormat.PNG
     });
 
     const requestValid = useMemo(() => value.image
-        && value.prompt
-        && validatePrompt(value.prompt)
+        && value.prompt && validatePrompt(value.prompt)
+        && value.searchPrompt && validatePrompt(value.searchPrompt)
         && (!value.negativePrompt || validatePrompt(value.negativePrompt))
         && (!value.seed || validateSeed(value.seed)), [value]);
 
     const send = async () => {
-        const image = await inpaint(value);
+        const image = await searchAndReplace(value);
         if (image instanceof File)
             setImage(image);
         else if (image)
@@ -35,24 +36,34 @@ const InpaintForm = () => {
     return (
         <form action={send}>
             <Stack
+                spacing={2}
+                direction='column'
+                flexWrap="wrap"
+                useFlexGap
+                sx={{ mb: 2 }}>
+                <PromptField
+                    required
+                    label="Prompt"
+                    value={value.prompt}
+                    onChange={e => setValue({ ...value, prompt: e.target.value })} />
+                <PromptField
+                    required
+                    label="Search prompt"
+                    value={value.searchPrompt}
+                    onChange={e => setValue({ ...value, searchPrompt: e.target.value })} />
+            </Stack>
+            <Stack
                 spacing={{ xs: 2, sm: 1 }}
                 direction={{ xs: 'column', sm: 'row' }}
                 flexWrap="wrap"
                 useFlexGap
                 sx={{ mb: 2 }}>
-                <Box sx={{ display: 'flex', flexGrow: 1 }}>
-                    <PromptField
-                        required
-                        label="Prompt"
-                        value={value.prompt}
-                        onChange={e => setValue({ ...value, prompt: e.target.value })} />
-                </Box>
                 <ImageInput
                     key={value.image?.name}
                     onChange={file => setValue({ ...value, image: file })}>
                     Upload image *
                 </ImageInput>
-                <Tooltip title={!value.image && 'Image required for inpaint'} >
+                <Tooltip title={!value.image && 'Image required for erase'} >
                     <span>
                         <SubmitButton
                             disabled={!requestValid}
@@ -63,28 +74,16 @@ const InpaintForm = () => {
                     </span>
                 </Tooltip>
             </Stack>
-            <Stack
-                spacing={{ xs: 0, sm: 2 }}
-                direction={{ xs: 'column', sm: 'row' }}
-                flexWrap="wrap"
-                useFlexGap>
-                <TitledImageDisplay
-                    alt={"Reference Image"}
-                    title="Reference image:"
-                    image={value.image}
-                    onClear={() => setValue({ ...value, image: undefined })} />
-                <TitledImageDisplay
-                    alt={"Mask Image"}
-                    title="Mask image:"
-                    image={value.mask}
-                    onClear={() => setValue({ ...value, mask: undefined })} />
-            </Stack>
+            <TitledImageDisplay
+                alt={"Reference Image"}
+                title="Reference image:"
+                image={value.image}
+                onClear={() => setValue({ ...value, image: undefined })} />
             <AdvancedOptions>
                 <PromptField
-                    onChange={e => setValue({ ...value, negativePrompt: e.target.value })}
-                    fullWidth
                     label="Negative prompt"
                     value={value.negativePrompt}
+                    onChange={e => setValue({ ...value, negativePrompt: e.target.value })}
                     sx={{ mb: 2 }} />
                 <Stack
                     spacing={{ xs: 2, sm: 1 }}
@@ -98,11 +97,6 @@ const InpaintForm = () => {
                     <SeedField
                         value={value.seed}
                         onChange={e => setValue({ ...value, seed: e.target.value })} />
-                    <ImageInput
-                        key={value.mask?.name}
-                        onChange={file => setValue({ ...value, mask: file })}>
-                        Upload mask
-                    </ImageInput>
                     <TitledSlider
                         min={0}
                         max={20}
@@ -117,4 +111,4 @@ const InpaintForm = () => {
     )
 }
 
-export default InpaintForm;
+export default SearchAndReplaceForm;
