@@ -1,6 +1,7 @@
 "use client"
 
-import { Box, Dialog, DialogContent, DialogContentText, Stack, TextField } from "@mui/material"
+import { Box, Button, ButtonGroup, Dialog, DialogContent, DialogContentText, Stack, TextField } from "@mui/material"
+import { signIn, signOut } from "next-auth/react"
 import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "../../ts/nextjs/navigation"
@@ -41,7 +42,7 @@ const ApiKeyDialog = ({ hasKey }: ApiKeyProviderProps) => {
             fullWidth>
             <DialogContent>
                 <DialogContentText sx={{ mb: 1 }}>
-                    Please enter your api key:
+                    Please enter your Stability AI API key:
                 </DialogContentText>
                 <form action={formData => handleSetApiKey(formData.get('apiKey') as string)}>
                     <Stack
@@ -65,12 +66,24 @@ const ApiKeyDialog = ({ hasKey }: ApiKeyProviderProps) => {
 
                     </Stack>
                 </form>
-                <DialogContentText sx={{ mt: 1 }}>
-                    You can access yours {
-                        <Link href={'https://platform.stability.ai/account/keys'} target="_blank" rel="noreferrer" style={{ color: 'inherit' }}>
-                            here
-                        </Link>}.
-                </DialogContentText>
+                <Stack
+                    spacing={2}
+                    sx={{ mt: 2 }}>
+                    <DialogContentText >
+                        You can access yours {
+                            <Link href={'https://platform.stability.ai/account/keys'} target="_blank" rel="noreferrer" style={{ color: 'inherit' }}>
+                                here
+                            </Link>}.
+                    </DialogContentText>
+                    <ButtonGroup size="small" variant="text" aria-label="Basic button group">
+                        <Button onClick={() => signOut({ callbackUrl: '/' })}>
+                            Sign out
+                        </Button>
+                        <Button onClick={() => signIn()}>
+                            Change account
+                        </Button>
+                    </ButtonGroup>
+                </Stack>
             </DialogContent>
         </Dialog>
     )
