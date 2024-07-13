@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom'
 import { validatePrompt } from '../components/common/PromptField'
  
-describe('Validate prompt', () => {
+describe(validatePrompt, () => {
 
   it('given valid prompt length then returns true', () => {
     expect(validatePrompt("test")).toBeTruthy()

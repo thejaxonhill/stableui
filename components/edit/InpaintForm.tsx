@@ -9,23 +9,25 @@ import { AdvancedOptions, ImageDisplay, ImageInput, OutputFormatSelect, PromptFi
 import { validatePrompt } from "../common/PromptField";
 import { validateSeed } from "../common/SeedField";
 
+export const validateInpaintParams = (params: InpaintParams) => params.image
+    && params.prompt
+    && validatePrompt(params.prompt)
+    && (!params.negativePrompt || validatePrompt(params.negativePrompt))
+    && (!params.seed || validateSeed(params.seed))
+
 const InpaintForm = () => {
     const router = useRouter();
     const [image, setImage] = useState<File | null>(null);
-    const [value, setValue] = useState<InpaintParams>({
+    const [params, setParams] = useState<InpaintParams>({
         prompt: '',
         growMask: 5,
         outputFormat: OutputFormat.PNG
     });
 
-    const requestValid = useMemo(() => value.image
-        && value.prompt
-        && validatePrompt(value.prompt)
-        && (!value.negativePrompt || validatePrompt(value.negativePrompt))
-        && (!value.seed || validateSeed(value.seed)), [value]);
+    const paramsValid = useMemo(() => validateInpaintParams(params), [params]);
 
     const send = async () => {
-        const image = await inpaint(value);
+        const image = await inpaint(params);
         if (image instanceof File)
             setImage(image);
         else if (image)
@@ -44,18 +46,18 @@ const InpaintForm = () => {
                     <PromptField
                         required
                         label="Prompt"
-                        value={value.prompt}
-                        onChange={e => setValue({ ...value, prompt: e.target.value })} />
+                        value={params.prompt}
+                        onChange={e => setParams({ ...params, prompt: e.target.value })} />
                 </Box>
                 <ImageInput
-                    key={value.image?.name}
-                    onChange={file => setValue({ ...value, image: file })}>
+                    key={params.image?.name}
+                    onChange={file => setParams({ ...params, image: file })}>
                     Upload image *
                 </ImageInput>
-                <Tooltip title={!value.image && 'Image required for inpaint'} >
+                <Tooltip title={!params.image && 'Image required for inpaint'} >
                     <span>
                         <SubmitButton
-                            disabled={!requestValid}
+                            disabled={!paramsValid}
                             variant="contained"
                             sx={{ height: '100%', width: '100%' }}>
                             Send
@@ -71,20 +73,20 @@ const InpaintForm = () => {
                 <TitledImageDisplay
                     alt={"Reference Image"}
                     title="Reference image:"
-                    image={value.image}
-                    onClear={() => setValue({ ...value, image: undefined })} />
+                    image={params.image}
+                    onClear={() => setParams({ ...params, image: undefined })} />
                 <TitledImageDisplay
                     alt={"Mask Image"}
                     title="Mask image:"
-                    image={value.mask}
-                    onClear={() => setValue({ ...value, mask: undefined })} />
+                    image={params.mask}
+                    onClear={() => setParams({ ...params, mask: undefined })} />
             </Stack>
             <AdvancedOptions>
                 <PromptField
-                    onChange={e => setValue({ ...value, negativePrompt: e.target.value })}
+                    onChange={e => setParams({ ...params, negativePrompt: e.target.value })}
                     fullWidth
                     label="Negative prompt"
-                    value={value.negativePrompt}
+                    value={params.negativePrompt}
                     sx={{ mb: 2 }} />
                 <Stack
                     spacing={{ xs: 2, sm: 1 }}
@@ -93,23 +95,23 @@ const InpaintForm = () => {
                     useFlexGap
                     sx={{ mb: 2 }} >
                     <OutputFormatSelect
-                        value={value.outputFormat}
-                        onChange={outputFormat => setValue({ ...value, outputFormat: outputFormat as OutputFormat })} />
+                        value={params.outputFormat}
+                        onChange={outputFormat => setParams({ ...params, outputFormat: outputFormat as OutputFormat })} />
                     <SeedField
-                        value={value.seed}
-                        onChange={e => setValue({ ...value, seed: e.target.value })} />
+                        value={params.seed}
+                        onChange={e => setParams({ ...params, seed: e.target.value })} />
                     <ImageInput
-                        key={value.mask?.name}
-                        onChange={file => setValue({ ...value, mask: file })}>
+                        key={params.mask?.name}
+                        onChange={file => setParams({ ...params, mask: file })}>
                         Upload mask
                     </ImageInput>
                     <TitledSlider
                         min={0}
                         max={20}
                         step={1}
-                        title={`Grow mask: ${value.growMask ?? 0}`}
-                        value={value.growMask}
-                        onChange={(e, v) => setValue({ ...value, growMask: v as number })} />
+                        title={`Grow mask: ${params.growMask ?? 0}`}
+                        value={params.growMask}
+                        onChange={(e, v) => setParams({ ...params, growMask: v as number })} />
                 </Stack>
             </AdvancedOptions>
             <ImageDisplay alt={image?.name ?? 'Response Image'} image={image} onClear={() => setImage(null)} showSave />

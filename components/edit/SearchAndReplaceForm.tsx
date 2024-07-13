@@ -9,24 +9,26 @@ import { AdvancedOptions, ImageDisplay, ImageInput, OutputFormatSelect, PromptFi
 import { validatePrompt } from "../common/PromptField";
 import { validateSeed } from "../common/SeedField";
 
+export const validateSearchAndReplaceParams = (params: SearchAndReplaceParams) => params.image
+    && params.prompt && validatePrompt(params.prompt)
+    && params.searchPrompt && validatePrompt(params.searchPrompt)
+    && (!params.negativePrompt || validatePrompt(params.negativePrompt))
+    && (!params.seed || validateSeed(params.seed));
+
 const SearchAndReplaceForm = () => {
     const router = useRouter();
     const [image, setImage] = useState<File | null>(null);
-    const [value, setValue] = useState<SearchAndReplaceParams>({
+    const [params, setParams] = useState<SearchAndReplaceParams>({
         prompt: '',
         searchPrompt: '',
         growMask: 3,
         outputFormat: OutputFormat.PNG
     });
 
-    const requestValid = useMemo(() => value.image
-        && value.prompt && validatePrompt(value.prompt)
-        && value.searchPrompt && validatePrompt(value.searchPrompt)
-        && (!value.negativePrompt || validatePrompt(value.negativePrompt))
-        && (!value.seed || validateSeed(value.seed)), [value]);
+    const paramsValid = useMemo(() => validateSearchAndReplaceParams(params), [params]);
 
     const send = async () => {
-        const image = await searchAndReplace(value);
+        const image = await searchAndReplace(params);
         if (image instanceof File)
             setImage(image);
         else if (image)
@@ -44,13 +46,13 @@ const SearchAndReplaceForm = () => {
                 <PromptField
                     required
                     label="Prompt"
-                    value={value.prompt}
-                    onChange={e => setValue({ ...value, prompt: e.target.value })} />
+                    value={params.prompt}
+                    onChange={e => setParams({ ...params, prompt: e.target.value })} />
                 <PromptField
                     required
                     label="Search prompt"
-                    value={value.searchPrompt}
-                    onChange={e => setValue({ ...value, searchPrompt: e.target.value })} />
+                    value={params.searchPrompt}
+                    onChange={e => setParams({ ...params, searchPrompt: e.target.value })} />
             </Stack>
             <Stack
                 spacing={{ xs: 2, sm: 1 }}
@@ -59,14 +61,14 @@ const SearchAndReplaceForm = () => {
                 useFlexGap
                 sx={{ mb: 2 }}>
                 <ImageInput
-                    key={value.image?.name}
-                    onChange={file => setValue({ ...value, image: file })}>
+                    key={params.image?.name}
+                    onChange={file => setParams({ ...params, image: file })}>
                     Upload image *
                 </ImageInput>
-                <Tooltip title={!value.image && 'Image required for erase'} >
+                <Tooltip title={!params.image && 'Image required for erase'} >
                     <span>
                         <SubmitButton
-                            disabled={!requestValid}
+                            disabled={!paramsValid}
                             variant="contained"
                             sx={{ height: '100%', width: '100%' }}>
                             Send
@@ -77,13 +79,13 @@ const SearchAndReplaceForm = () => {
             <TitledImageDisplay
                 alt={"Reference Image"}
                 title="Reference image:"
-                image={value.image}
-                onClear={() => setValue({ ...value, image: undefined })} />
+                image={params.image}
+                onClear={() => setParams({ ...params, image: undefined })} />
             <AdvancedOptions>
                 <PromptField
                     label="Negative prompt"
-                    value={value.negativePrompt}
-                    onChange={e => setValue({ ...value, negativePrompt: e.target.value })}
+                    value={params.negativePrompt}
+                    onChange={e => setParams({ ...params, negativePrompt: e.target.value })}
                     sx={{ mb: 2 }} />
                 <Stack
                     spacing={{ xs: 2, sm: 1 }}
@@ -92,18 +94,18 @@ const SearchAndReplaceForm = () => {
                     useFlexGap
                     sx={{ mb: 2 }} >
                     <OutputFormatSelect
-                        value={value.outputFormat}
-                        onChange={outputFormat => setValue({ ...value, outputFormat: outputFormat as OutputFormat })} />
+                        value={params.outputFormat}
+                        onChange={outputFormat => setParams({ ...params, outputFormat: outputFormat as OutputFormat })} />
                     <SeedField
-                        value={value.seed}
-                        onChange={e => setValue({ ...value, seed: e.target.value })} />
+                        value={params.seed}
+                        onChange={e => setParams({ ...params, seed: e.target.value })} />
                     <TitledSlider
                         min={0}
                         max={20}
                         step={1}
-                        title={`Grow mask: ${value.growMask ?? 0}`}
-                        value={value.growMask}
-                        onChange={(e, v) => setValue({ ...value, growMask: v as number })} />
+                        title={`Grow mask: ${params.growMask ?? 0}`}
+                        value={params.growMask}
+                        onChange={(e, v) => setParams({ ...params, growMask: v as number })} />
                 </Stack>
             </AdvancedOptions>
             <ImageDisplay alt={image?.name ?? 'Response Image'} image={image} onClear={() => setImage(null)} showSave />

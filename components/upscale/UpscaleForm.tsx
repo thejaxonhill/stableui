@@ -2,34 +2,36 @@
 
 import { Box, Stack, Tooltip, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
-import { UpscaleImageParams } from "../../ts/client/upscale";
+import { UpscaleParams } from "../../ts/client/upscale";
 import { useRouter } from "../../ts/nextjs/navigation";
 import { OutputFormat } from "../../ts/types";
 import { AdvancedOptions, ImageDisplay, ImageInput, OutputFormatSelect, PromptField, SeedField, SubmitButton, TitledSlider } from "../common";
 import { validatePrompt } from "../common/PromptField";
 import { validateSeed } from "../common/SeedField";
 
+export const validateUpscaleParams = (params: UpscaleParams) => params.image
+    && params.prompt
+    && validatePrompt(params.prompt)
+    && (!params.negativePrompt || validatePrompt(params.negativePrompt))
+    && (!params.seed || validateSeed(params.seed));
+
 type UpscaleFormProps = {
-    onSend: (r: UpscaleImageParams) => Promise<File | string>;
+    onSend: (params: UpscaleParams) => Promise<File | string>;
 }
 
 const UpscaleForm = ({ onSend }: UpscaleFormProps) => {
     const router = useRouter();
     const [image, setImage] = useState<File | null>(null);
-    const [value, setValue] = useState<UpscaleImageParams>({
+    const [params, setParams] = useState<UpscaleParams>({
         prompt: "",
         creativity: 0.35,
         outputFormat: OutputFormat.PNG
     });
 
-    const requestValid = useMemo(() => value.image
-        && value.prompt
-        && validatePrompt(value.prompt)
-        && (!value.negativePrompt || validatePrompt(value.negativePrompt))
-        && (!value.seed || validateSeed(value.seed)), [value]);
+    const paramsValid = useMemo(() => validateUpscaleParams(params), [params]);
 
     const handleUpscale = async () => {
-        const image = await onSend(value);
+        const image = await onSend(params);
         if (image instanceof File)
             setImage(image);
         else if (image)
@@ -47,18 +49,18 @@ const UpscaleForm = ({ onSend }: UpscaleFormProps) => {
                     <PromptField
                         required
                         label="Prompt"
-                        value={value.prompt}
-                        onChange={e => setValue({ ...value, prompt: e.target.value })} />
+                        value={params.prompt}
+                        onChange={e => setParams({ ...params, prompt: e.target.value })} />
                 </Box>
                 <ImageInput
-                    key={value.image?.name}
-                    onChange={file => setValue({ ...value, image: file })}>
+                    key={params.image?.name}
+                    onChange={file => setParams({ ...params, image: file })}>
                     Upload image *
                 </ImageInput>
-                <Tooltip title={!value.image && 'Image required for upscale'} >
+                <Tooltip title={!params.image && 'Image required for upscale'} >
                     <span>
                         <SubmitButton
-                            disabled={!requestValid}
+                            disabled={!paramsValid}
                             variant="contained"
                             sx={{ height: '100%', width: '100%' }}>
                             Send
@@ -66,22 +68,22 @@ const UpscaleForm = ({ onSend }: UpscaleFormProps) => {
                     </span>
                 </Tooltip>
             </Stack>
-            {value.image &&
+            {params.image &&
                 <Box>
                     <Typography>Reference image: </Typography>
                     <ImageDisplay
                         alt={"Reference Image"}
-                        image={value.image}
-                        onClear={() => setValue({ ...value, image: undefined })}
+                        image={params.image}
+                        onClear={() => setParams({ ...params, image: undefined })}
                         maxWidth={400} />
                 </Box>
             }
             <AdvancedOptions>
                 <PromptField
-                    onChange={e => setValue({ ...value, negativePrompt: e.target.value })}
+                    onChange={e => setParams({ ...params, negativePrompt: e.target.value })}
                     fullWidth
                     label="Negative prompt"
-                    value={value.negativePrompt}
+                    value={params.negativePrompt}
                     sx={{ mb: 2 }} />
                 <Stack
                     spacing={{ xs: 2, sm: 1 }}
@@ -90,21 +92,21 @@ const UpscaleForm = ({ onSend }: UpscaleFormProps) => {
                     useFlexGap
                     sx={{ mb: 2 }} >
                     <OutputFormatSelect
-                        value={value.outputFormat}
-                        onChange={outputFormat => setValue({ ...value, outputFormat: outputFormat as OutputFormat })} />
+                        value={params.outputFormat}
+                        onChange={outputFormat => setParams({ ...params, outputFormat: outputFormat as OutputFormat })} />
                     <SeedField
-                        value={value.seed}
-                        onChange={e => setValue({ ...value, seed: e.target.value })} />
+                        value={params.seed}
+                        onChange={e => setParams({ ...params, seed: e.target.value })} />
                     <TitledSlider
                         min={0.2}
                         max={0.5}
                         step={0.01}
-                        title={`Creativity: ${value.creativity ?? 0}`}
-                        value={value.creativity}
-                        onChange={(e, v) => setValue({ ...value, creativity: v as number })} />
+                        title={`Creativity: ${params.creativity ?? 0}`}
+                        value={params.creativity}
+                        onChange={(e, v) => setParams({ ...params, creativity: v as number })} />
                 </Stack>
             </AdvancedOptions>
-            <ImageDisplay alt={value.prompt} image={image} onClear={() => setImage(null)} showSave />
+            <ImageDisplay alt={params.prompt} image={image} onClear={() => setImage(null)} showSave />
         </form >
     )
 }

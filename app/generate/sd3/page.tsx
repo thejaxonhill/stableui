@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { Metadata } from "next";
 import { TitleCard } from "../../../components/common";
-import GenerateImageSD3Form from "../../../components/generate/GenerateImageSD3Form";
+import GenerateSD3Form from "../../../components/generate/GenerateSD3Form";
 import { SD3Model } from "../../../ts/client/generate";
 
 export const metadata: Metadata = {
@@ -28,7 +28,7 @@ const GenerateSD3 = async ({ searchParams }: GenerateSD3Params) => {
     return (
         <Box sx={{ mt: 3 }}>
             <TitleCard creditCost={creditCost} title="Stable Diffusion 3" />
-            <GenerateImageSD3Form model={model as SD3Model} />
+            <GenerateSD3Form model={model as SD3Model} />
         </Box>
     )
 }

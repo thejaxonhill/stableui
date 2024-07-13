@@ -2,7 +2,7 @@ import { OutputFormat } from "../types";
 import {ExtendedFormData as FormData} from "../components/extended-formdata";
 import { checkResponse, mapImageToImage } from "./shared";
 
-export type UpscaleImageParams = {
+export type UpscaleParams = {
     prompt: string;
     image?: File;
     negativePrompt?: string;
@@ -11,11 +11,11 @@ export type UpscaleImageParams = {
     creativity?: number;
 };
 
-export const upscaleConservative = async (request: UpscaleImageParams) => { 
+export const upscaleConservative = async (request: UpscaleParams) => { 
     return upscale("/api/upscale/conservative", request);
 }
 
-const upscale = async (endpoint: string, request: UpscaleImageParams) => {
+const upscale = async (endpoint: string, request: UpscaleParams) => {
     const formData = new FormData();
     formData.set("prompt", request.prompt);
     formData.setIfPresent("image", request.image);

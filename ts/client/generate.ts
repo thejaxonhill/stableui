@@ -1,6 +1,7 @@
 import { ExtendedFormData as FormData } from "../components/extended-formdata";
+import { getFileExt } from "../components/file-helpers";
 import { AspectRatio, OutputFormat } from "../types";
-import { checkResponse, mapPromptToImage } from "./shared";
+import { checkResponse, mapImageToImage, mapPromptToImage } from "./shared";
 
 export type SD3Model = "sd3-large" | "sd3-large-turbo" |"sd3-medium";
 
@@ -24,7 +25,7 @@ export enum StylePreset {
     "Tile texture" = "tile-texture",
 }
 
-export type GenerateImageParams = {
+export type GenerateParams = {
     prompt: string;
     aspectRatio?: AspectRatio;
     negativePrompt?: string;
@@ -32,59 +33,60 @@ export type GenerateImageParams = {
     seed?: string
 };
 
-export type GenerateImageCoreParams = GenerateImageParams & {
+export type GenerateCoreParams = GenerateParams & {
     stylePreset?: StylePreset;
 };
 
-export type GenerateImageSD3Params = GenerateImageParams & {
+export type GenerateSD3Params = GenerateParams & {
     image?: File;
     model?: SD3Model;
     strength?: number;
 };
 
-export type GenerateImageUltraParams = GenerateImageParams; 
+export type GenerateUltraParams = GenerateParams; 
 
-export const generateImageCore = async (request: GenerateImageCoreParams) => {
-    const formData = formDatawithBaseParams(request);
-    if(request.stylePreset)
-        formData.set("style_preset", request.stylePreset)
+export const generateCore = async (params: GenerateCoreParams) => {
+    const formData = formDatawithBaseParams(params);
+    if(params.stylePreset)
+        formData.set("style_preset", params.stylePreset)
     return await generateImage("/api/generate/core", formData);
 }
 
-export const generateImageSD3 = async (request: GenerateImageSD3Params) => {
-    const formData = formDatawithBaseParams(request);
-    formData.setIfPresent("model", request.model);
-    if(request.image) {
-        formData.set("image", request.image);
+export const generateSD3 = async (params: GenerateSD3Params) => {
+    const formData = formDatawithBaseParams(params);
+    formData.setIfPresent("model", params.model);
+    if(params.image) {
+        formData.set("image", params.image);
         formData.set("mode", "image-to-image");
-        formData.set("strength", request.strength ? String(request.strength) : '0');
+        formData.set("strength", params.strength ? String(params.strength) : '0');
         formData.delete("aspect_ratio")
     }
     return await generateImage("/api/generate/sd3", formData);
 }
 
-export const generateImageUltra = async (request: GenerateImageUltraParams) => {
-    return await generateImage("/api/generate/ultra", formDatawithBaseParams(request));
+export const generateUltra = async (params: GenerateUltraParams) => {
+    return await generateImage("/api/generate/ultra", formDatawithBaseParams(params));
 }
 
 const generateImage = async (endpoint: string, formData: FormData) => {
+    const image = formData.get('image') as File;
     return await fetch(endpoint, {
         body: formData,
         method: 'post',
         headers: { "Accept": "image/*" }
     })
     .then(checkResponse)
-    .then(mapPromptToImage(formData.has('prompt') 
-    ? formData.get('prompt')?.toString()! 
-    : 'image', formData.get('output_format')?.toString() as OutputFormat))
+    .then(image 
+    ? mapImageToImage(image, getFileExt(image) as OutputFormat) 
+    : mapPromptToImage(formData.get('prompt')?.toString()! , formData.get('output_format')?.toString() as OutputFormat))
 }
 
-const formDatawithBaseParams = <T extends GenerateImageParams> (request: T) => {
+const formDatawithBaseParams = <T extends GenerateParams> (params: T) => {
     const formData = new FormData();
-    formData.set("prompt", request.prompt);
-    formData.setIfPresent("aspect_ratio", request.aspectRatio)
-    formData.setIfPresent("negative_prompt", request.negativePrompt)
-    formData.setIfPresent("output_format", request.outputFormat?.valueOf())
-    formData.setIfPresent("seed", request.seed)
+    formData.set("prompt", params.prompt);
+    formData.setIfPresent("aspect_ratio", params.aspectRatio)
+    formData.setIfPresent("negative_prompt", params.negativePrompt)
+    formData.setIfPresent("output_format", params.outputFormat?.valueOf())
+    formData.setIfPresent("seed", params.seed)
     return formData;
 }
