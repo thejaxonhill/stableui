@@ -8,6 +8,8 @@ import { OutputFormat } from "../../ts/types";
 import { AdvancedOptions, ImageDisplay, ImageInput, OutputFormatSelect, SeedField, SubmitButton, TitledImageDisplay, TitledSlider } from "../common";
 import { validateSeed } from "../common/SeedField";
 
+export const validateEraseRequest = (value: EraseParams) => value.image && (!value.seed || validateSeed(value.seed));
+
 const EraseForm = () => {
     const router = useRouter();
     const [image, setImage] = useState<File | null>(null);
@@ -16,7 +18,7 @@ const EraseForm = () => {
         outputFormat: OutputFormat.PNG
     });
 
-    const requestValid = useMemo(() => value.image && (!value.seed || validateSeed(value.seed)), [value]);
+    const requestValid = useMemo(() => validateEraseRequest(value), [value]);
 
     const send = async () => {
         const image = await erase(value);

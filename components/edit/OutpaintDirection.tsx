@@ -3,7 +3,7 @@
 import { TextField, TextFieldProps } from "@mui/material";
 import { useMemo } from "react";
 
-export const validateOutpaintDirection = (value?: string) => !value || Number(value) >= 0 && Number(value) < 2000;
+export const validateOutpaintDirection = (value?: string) => !value || Number(value) > 0 && Number(value) < 2000;
 
 type OutpaintDirectionProps = Omit<TextFieldProps, 'value'> & {
     value?: string;
