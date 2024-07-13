@@ -1,14 +1,14 @@
 /**
  * @jest-environment node
  */
-import { generateImageCore, GenerateImageCoreParams, generateImageSD3, GenerateImageSD3Params, generateImageUltra, GenerateImageUltraParams, StylePreset } from "../ts/client/generate"
+import { generateCore, GenerateCoreParams, generateSD3, GenerateSD3Params, generateUltra, GenerateUltraParams, StylePreset } from "../ts/client/generate"
 import { ExtendedFormData } from "../ts/components/extended-formdata"
 import { AspectRatio, OutputFormat } from "../ts/types"
 import { mockFetch } from "./shared/mock-fetch";
 
-describe(generateImageSD3, () => {
+describe(generateSD3, () => {
     it('given text to image request when generateImageSD3 then formData is set correctly', async () => {
-        const params: GenerateImageSD3Params = {
+        const params: GenerateSD3Params = {
             aspectRatio: AspectRatio["1:1"],
             model: 'sd3-medium',
             negativePrompt: 'test',
@@ -18,7 +18,7 @@ describe(generateImageSD3, () => {
             strength: .5,
         };
         
-        await generateImageSD3(params);
+        await generateSD3(params);
 
         expect(mockFetch).toHaveBeenCalledWith('/api/generate/sd3',  expect.objectContaining({
                 body: expect.any(ExtendedFormData),
@@ -37,7 +37,7 @@ describe(generateImageSD3, () => {
     })
 
     it('given image to image request when generateImageSD3 then formData is set correctly', async () => {
-        const params: GenerateImageSD3Params = {
+        const params: GenerateSD3Params = {
             aspectRatio: AspectRatio["1:1"],
             image: new File([], 'test.png'),
             model: 'sd3-medium',
@@ -48,7 +48,7 @@ describe(generateImageSD3, () => {
             strength: .5,
         };
         
-        await generateImageSD3(params);
+        await generateSD3(params);
 
         expect(mockFetch).toHaveBeenCalledWith('/api/generate/sd3',  expect.objectContaining({
                 body: expect.any(ExtendedFormData),
@@ -60,6 +60,7 @@ describe(generateImageSD3, () => {
         expect(body.has('aspect_ratio')).toBeFalsy();
         expect(body.has('image')).toBeTruthy();
         expect(body.has('model')).toBeTruthy();
+        expect(body.has('mode')).toBeTruthy();
         expect(body.has('negative_prompt')).toBeTruthy();
         expect(body.has('output_format')).toBeTruthy();
         expect(body.has('prompt')).toBeTruthy();
@@ -68,9 +69,9 @@ describe(generateImageSD3, () => {
     })
 });
 
-describe(generateImageCore, () => {
+describe(generateCore, () => {
     it('when generateImageCore then formData is set correctly', async () => {
-        const params: GenerateImageCoreParams = {
+        const params: GenerateCoreParams = {
             aspectRatio: AspectRatio["1:1"],
             negativePrompt: 'test',
             outputFormat: OutputFormat.PNG,
@@ -79,7 +80,7 @@ describe(generateImageCore, () => {
             stylePreset: StylePreset["Analog film"]
         };
         
-        await generateImageCore(params);
+        await generateCore(params);
 
         expect(mockFetch).toHaveBeenCalledWith('/api/generate/core',  expect.objectContaining({
                 body: expect.any(ExtendedFormData),
@@ -97,9 +98,9 @@ describe(generateImageCore, () => {
     })
 })
 
-describe(generateImageUltra, () => {
+describe(generateUltra, () => {
     it('when generateImageUltra then formData is set correctly', async () => {
-        const params: GenerateImageUltraParams = {
+        const params: GenerateUltraParams = {
             aspectRatio: AspectRatio["1:1"],
             negativePrompt: 'test',
             outputFormat: OutputFormat.PNG,
@@ -107,7 +108,7 @@ describe(generateImageUltra, () => {
             seed: '1000',
         };
         
-        await generateImageUltra(params);
+        await generateUltra(params);
 
         expect(mockFetch).toHaveBeenCalledWith('/api/generate/ultra',  expect.objectContaining({
                 body: expect.any(ExtendedFormData),

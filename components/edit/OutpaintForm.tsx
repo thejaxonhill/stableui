@@ -10,26 +10,28 @@ import { validatePrompt } from "../common/PromptField";
 import { validateSeed } from "../common/SeedField";
 import OutpaintDirection, { validateOutpaintDirection } from "./OutpaintDirection";
 
+export const validateOutpaintParams = (params: OutpaintParams) => params.image
+    && (!!params.left || params.right || params.up || params.down)
+    && (!params.left || validateOutpaintDirection(params.left))
+    && (!params.right || validateOutpaintDirection(params.right))
+    && (!params.up || validateOutpaintDirection(params.up))
+    && (!params.down || validateOutpaintDirection(params.down))
+    && (!params.prompt || validatePrompt(params.prompt))
+    && (!params.seed || validateSeed(params.seed));
+
 const OutpaintForm = () => {
     const router = useRouter();
     const [image, setImage] = useState<File | null>(null);
-    const [value, setValue] = useState<OutpaintParams>({
+    const [params, setParams] = useState<OutpaintParams>({
         prompt: '',
         creativity: .5,
         outputFormat: OutputFormat.PNG
     });
 
-    const requestValid = useMemo(() => value.image
-        && (!!value.left || value.right || value.up || value.down)
-        && (!value.left || validateOutpaintDirection(value.left))
-        && (!value.right || validateOutpaintDirection(value.right))
-        && (!value.up || validateOutpaintDirection(value.up))
-        && (!value.down || validateOutpaintDirection(value.down))
-        && (!value.prompt || validatePrompt(value.prompt))
-        && (!value.seed || validateSeed(value.seed)), [value]);
+    const requestValid = useMemo(() => validateOutpaintParams(params), [params]);
 
     const send = async () => {
-        const image = await outpaint(value);
+        const image = await outpaint(params);
         if (image instanceof File)
             setImage(image);
         else if (image)
@@ -46,20 +48,20 @@ const OutpaintForm = () => {
                 sx={{ mb: 2 }}>
                 <OutpaintDirection
                     direction="left"
-                    value={value.left}
-                    onChange={e => setValue({ ...value, left: e.target.value })} />
+                    value={params.left}
+                    onChange={e => setParams({ ...params, left: e.target.value })} />
                 <OutpaintDirection
                     direction="right"
-                    value={value.right}
-                    onChange={e => setValue({ ...value, right: e.target.value })} />
+                    value={params.right}
+                    onChange={e => setParams({ ...params, right: e.target.value })} />
                 <OutpaintDirection
                     direction="up"
-                    value={value.up}
-                    onChange={e => setValue({ ...value, up: e.target.value })} />
+                    value={params.up}
+                    onChange={e => setParams({ ...params, up: e.target.value })} />
                 <OutpaintDirection
                     direction="down"
-                    value={value.down}
-                    onChange={e => setValue({ ...value, down: e.target.value })} />
+                    value={params.down}
+                    onChange={e => setParams({ ...params, down: e.target.value })} />
             </Stack>
             <Stack
                 spacing={{ xs: 2, sm: 1 }}
@@ -68,12 +70,12 @@ const OutpaintForm = () => {
                 useFlexGap
                 sx={{ mb: 2 }}>
                 <ImageInput
-                    key={value.image?.name}
-                    onChange={file => setValue({ ...value, image: file })}>
+                    key={params.image?.name}
+                    onChange={file => setParams({ ...params, image: file })}>
                     Upload image *
                 </ImageInput>
-                <Tooltip title={!value.image && 'Image required for outpaint'
-                    || !value.left && !value.right && !value.up && !value.down && 'At least one outpaint direction is required'} >
+                <Tooltip title={!params.image && 'Image required for outpaint'
+                    || !params.left && !params.right && !params.up && !params.down && 'At least one outpaint direction is required'} >
                     <span>
                         <SubmitButton
                             disabled={!requestValid}
@@ -87,8 +89,8 @@ const OutpaintForm = () => {
             <TitledImageDisplay
                 alt={"Reference Image"}
                 title="Reference image:"
-                image={value.image}
-                onClear={() => setValue({ ...value, image: undefined })} />
+                image={params.image}
+                onClear={() => setParams({ ...params, image: undefined })} />
             <AdvancedOptions>
                 <Stack
                     spacing={{ xs: 2, sm: 1 }}
@@ -98,21 +100,21 @@ const OutpaintForm = () => {
                     sx={{ mb: 2 }} >
                     <PromptField
                         label="Prompt"
-                        value={value.prompt}
-                        onChange={e => setValue({ ...value, prompt: e.target.value })} />
+                        value={params.prompt}
+                        onChange={e => setParams({ ...params, prompt: e.target.value })} />
                     <OutputFormatSelect
-                        value={value.outputFormat}
-                        onChange={outputFormat => setValue({ ...value, outputFormat: outputFormat as OutputFormat })} />
+                        value={params.outputFormat}
+                        onChange={outputFormat => setParams({ ...params, outputFormat: outputFormat as OutputFormat })} />
                     <SeedField
-                        value={value.seed}
-                        onChange={e => setValue({ ...value, seed: e.target.value })} />
+                        value={params.seed}
+                        onChange={e => setParams({ ...params, seed: e.target.value })} />
                     <TitledSlider
                         min={0}
                         max={1}
                         step={.01}
-                        title={`Creativity: ${value.creativity ?? 0}`}
-                        value={value.creativity}
-                        onChange={(e, v) => setValue({ ...value, creativity: v as number })} />
+                        title={`Creativity: ${params.creativity ?? 0}`}
+                        value={params.creativity}
+                        onChange={(e, v) => setParams({ ...params, creativity: v as number })} />
                 </Stack>
             </AdvancedOptions>
             <ImageDisplay alt={image?.name ?? 'Response Image'} image={image} onClear={() => setImage(null)} showSave />

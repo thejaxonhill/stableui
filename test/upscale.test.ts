@@ -1,14 +1,14 @@
 /**
  * @jest-environment node
  */
-import { upscaleConservative, UpscaleImageParams } from "../ts/client/upscale";
+import { upscaleConservative, UpscaleParams } from "../ts/client/upscale";
 import { ExtendedFormData } from "../ts/components/extended-formdata";
 import { OutputFormat } from "../ts/types";
 import { mockFetch } from "./shared/mock-fetch";
 
 describe(upscaleConservative, () => {
     it('when upscaleConservative then formData is set correctly', async () => {
-        const params: UpscaleImageParams = {
+        const params: UpscaleParams = {
             creativity: 5,
             image: new File([], 'test.png'),
             negativePrompt: 'test',

@@ -8,20 +8,20 @@ import { OutputFormat } from "../../ts/types";
 import { AdvancedOptions, ImageDisplay, ImageInput, OutputFormatSelect, SeedField, SubmitButton, TitledImageDisplay, TitledSlider } from "../common";
 import { validateSeed } from "../common/SeedField";
 
-export const validateEraseRequest = (value: EraseParams) => value.image && (!value.seed || validateSeed(value.seed));
+export const validateEraseParams = (params: EraseParams) => params.image && (!params.seed || validateSeed(params.seed));
 
 const EraseForm = () => {
     const router = useRouter();
     const [image, setImage] = useState<File | null>(null);
-    const [value, setValue] = useState<EraseParams>({
+    const [params, setParams] = useState<EraseParams>({
         growMask: 5,
         outputFormat: OutputFormat.PNG
     });
 
-    const requestValid = useMemo(() => validateEraseRequest(value), [value]);
+    const paramsValid = useMemo(() => validateEraseParams(params), [params]);
 
     const send = async () => {
-        const image = await erase(value);
+        const image = await erase(params);
         if (image instanceof File)
             setImage(image);
         else if (image)
@@ -37,14 +37,14 @@ const EraseForm = () => {
                 useFlexGap
                 sx={{ mb: 2 }}>
                 <ImageInput
-                    key={value.image?.name}
-                    onChange={file => setValue({ ...value, image: file })}>
+                    key={params.image?.name}
+                    onChange={file => setParams({ ...params, image: file })}>
                     Upload image *
                 </ImageInput>
-                <Tooltip title={!value.image && 'Image required for erase'} >
+                <Tooltip title={!params.image && 'Image required for erase'} >
                     <span>
                         <SubmitButton
-                            disabled={!requestValid}
+                            disabled={!paramsValid}
                             variant="contained"
                             sx={{ height: '100%', width: '100%' }}>
                             Send
@@ -60,13 +60,13 @@ const EraseForm = () => {
                 <TitledImageDisplay
                     alt={"Reference Image"}
                     title="Reference image:"
-                    image={value.image}
-                    onClear={() => setValue({ ...value, image: undefined })} />
+                    image={params.image}
+                    onClear={() => setParams({ ...params, image: undefined })} />
                 <TitledImageDisplay
                     alt={"Mask Image"}
                     title="Mask image:"
-                    image={value.mask}
-                    onClear={() => setValue({ ...value, mask: undefined })} />
+                    image={params.mask}
+                    onClear={() => setParams({ ...params, mask: undefined })} />
             </Stack>
             <AdvancedOptions>
                 <Stack
@@ -76,23 +76,23 @@ const EraseForm = () => {
                     useFlexGap
                     sx={{ mb: 2 }} >
                     <OutputFormatSelect
-                        value={value.outputFormat}
-                        onChange={outputFormat => setValue({ ...value, outputFormat: outputFormat as OutputFormat })} />
+                        value={params.outputFormat}
+                        onChange={outputFormat => setParams({ ...params, outputFormat: outputFormat as OutputFormat })} />
                     <SeedField
-                        value={value.seed}
-                        onChange={e => setValue({ ...value, seed: e.target.value })} />
+                        value={params.seed}
+                        onChange={e => setParams({ ...params, seed: e.target.value })} />
                     <ImageInput
-                        key={value.mask?.name}
-                        onChange={file => setValue({ ...value, mask: file })}>
+                        key={params.mask?.name}
+                        onChange={file => setParams({ ...params, mask: file })}>
                         Upload mask
                     </ImageInput>
                     <TitledSlider
                         min={0}
                         max={20}
                         step={1}
-                        title={`Grow mask: ${value.growMask ?? 0}`}
-                        value={value.growMask}
-                        onChange={(e, v) => setValue({ ...value, growMask: v as number })} />
+                        title={`Grow mask: ${params.growMask ?? 0}`}
+                        value={params.growMask}
+                        onChange={(e, v) => setParams({ ...params, growMask: v as number })} />
                 </Stack>
             </AdvancedOptions>
             <ImageDisplay alt={image?.name ?? 'Response Image'} image={image} onClear={() => setImage(null)} showSave />

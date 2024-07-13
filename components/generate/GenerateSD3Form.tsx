@@ -2,7 +2,7 @@
 
 import { Box, FormControl, InputLabel, MenuItem, Select, Stack } from '@mui/material';
 import { useState } from 'react';
-import { GenerateImageSD3Params, SD3Model, generateImageSD3 } from '../../ts/client/generate';
+import { GenerateSD3Params, SD3Model, generateSD3 } from '../../ts/client/generate';
 import { useRouter } from '../../ts/nextjs/navigation';
 import { AspectRatio, OutputFormat } from '../../ts/types';
 import { ImageInput, TitledImageDisplay, TitledSlider } from '../common';
@@ -14,7 +14,7 @@ type GenerateImageSD3FormProps = {
 
 const GenerateImageSD3Form = ({ model = 'sd3-medium' }: GenerateImageSD3FormProps) => {
     const router = useRouter();
-    const [value, setValue] = useState<GenerateImageSD3Params>({
+    const [value, setValue] = useState<GenerateSD3Params>({
         prompt: "",
         outputFormat: OutputFormat.PNG,
         aspectRatio: AspectRatio["1:1"],
@@ -26,7 +26,7 @@ const GenerateImageSD3Form = ({ model = 'sd3-medium' }: GenerateImageSD3FormProp
         <GenerateImageForm
             value={value}
             onChange={r => setValue(r)}
-            onSend={generateImageSD3} >
+            onSend={generateSD3} >
             <Stack
                 spacing={{ xs: 2, sm: 1 }}
                 direction={{ xs: 'column', sm: 'row' }}

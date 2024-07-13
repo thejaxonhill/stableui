@@ -2,23 +2,28 @@
 
 import { Box, Stack } from "@mui/material";
 import { ReactNode, useMemo, useState } from 'react';
-import { GenerateImageParams } from '../../ts/client/generate';
+import { GenerateParams } from '../../ts/client/generate';
 import { useRouter } from '../../ts/nextjs/navigation';
 import { AspectRatio, OutputFormat } from '../../ts/types';
 import { AdvancedOptions, AspectRatioSelect, ImageDisplay, OutputFormatSelect, PromptField, SeedField, SubmitButton } from '../common';
 import { validatePrompt } from '../common/PromptField';
 import { validateSeed } from '../common/SeedField';
 
-type GenerateImageFormProps<T extends GenerateImageParams> = {
+export const validateGenerateParams = <T extends GenerateParams>(params: T) => params.prompt
+    && validatePrompt(params.prompt)
+    && (!params.negativePrompt || validatePrompt(params.negativePrompt))
+    && (!params.seed || validateSeed(params.seed));
+
+type GenerateImageFormProps<T extends GenerateParams> = {
     children?: ReactNode;
     value: T;
-    onChange: (params: GenerateImageParams) => void;
-    onSend: (r: T) => Promise<File | string>;
+    onChange: (params: GenerateParams) => void;
+    onSend: (params: T) => Promise<File | string>;
 }
 
 const GenerateImageForm = ({
     children,
-    value = {
+    value: params = {
         prompt: "",
         outputFormat: OutputFormat.PNG,
         aspectRatio: AspectRatio["16:9"]
@@ -29,17 +34,14 @@ const GenerateImageForm = ({
     const [image, setImage] = useState<File | null>(null);
 
     const handleGenerate = async () => {
-        const image = await onSend(value);
+        const image = await onSend(params);
         if (image instanceof File)
             setImage(image);
         else if (image)
             router.set('error', image)
     }
 
-    const requestValid = useMemo(() => value.prompt
-        && validatePrompt(value.prompt)
-        && (!value.negativePrompt || validatePrompt(value.negativePrompt))
-        && (!value.seed || validateSeed(value.seed)), [value]);
+    const paramsValid = useMemo(() => validateGenerateParams(params), [params]);
 
     return (
         <form action={() => handleGenerate()}>
@@ -52,16 +54,16 @@ const GenerateImageForm = ({
                     <PromptField
                         required
                         label="Prompt"
-                        value={value.prompt}
-                        onChange={e => onChange({ ...value, prompt: e.target.value })} />
+                        value={params.prompt}
+                        onChange={e => onChange({ ...params, prompt: e.target.value })} />
                 </Box>
-                {!value.image &&
+                {!params.image &&
                     <AspectRatioSelect
-                        value={value.aspectRatio}
-                        onChange={aspectRatio => onChange({ ...value, aspectRatio })} />
+                        value={params.aspectRatio}
+                        onChange={aspectRatio => onChange({ ...params, aspectRatio })} />
                 }
                 <SubmitButton
-                    disabled={!requestValid}
+                    disabled={!paramsValid}
                     variant="contained">
                     Send
                 </SubmitButton>
@@ -69,10 +71,10 @@ const GenerateImageForm = ({
             {children}
             <AdvancedOptions>
                 <PromptField
-                    onChange={e => onChange({ ...value, negativePrompt: e.target.value })}
+                    onChange={e => onChange({ ...params, negativePrompt: e.target.value })}
                     fullWidth
                     label="Negative prompt"
-                    value={value.negativePrompt}
+                    value={params.negativePrompt}
                     sx={{ mb: 2 }} />
                 <Stack
                     spacing={{ xs: 2, sm: 1 }}
@@ -81,14 +83,14 @@ const GenerateImageForm = ({
                     useFlexGap
                     sx={{ mb: 2 }} >
                     <OutputFormatSelect
-                        value={value.outputFormat}
-                        onChange={outputFormat => onChange({ ...value, outputFormat })} />
+                        value={params.outputFormat}
+                        onChange={outputFormat => onChange({ ...params, outputFormat })} />
                     <SeedField
-                        value={value.seed}
-                        onChange={e => onChange({ ...value, seed: e.target.value })} />
+                        value={params.seed}
+                        onChange={e => onChange({ ...params, seed: e.target.value })} />
                 </Stack>
             </AdvancedOptions>
-            <ImageDisplay alt={value.prompt} image={image} onClear={() => setImage(null)} showSave />
+            <ImageDisplay alt={params.prompt} image={image} onClear={() => setImage(null)} showSave />
         </form >
     )
 }

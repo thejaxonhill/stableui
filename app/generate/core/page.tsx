@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { Metadata } from "next";
 import { TitleCard } from "../../../components/common";
-import GenerateImageCoreForm from "../../../components/generate/GenerateImageCoreForm";
+import GenerateImageCoreForm from "../../../components/generate/GenerateCoreForm";
 
 export const metadata: Metadata = {
     title: 'Stable UI - Generate - Stable Image Core'
