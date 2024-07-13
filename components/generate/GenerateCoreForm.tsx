@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import { GenerateCoreParams, StylePreset, generateCore } from '../../ts/client/generate';
-import GenerateImageForm from "./GenerateImageForm";
+import GenerateForm from "./GenerateForm";
 import { FormControl, InputLabel, MenuItem, Select, Stack } from '@mui/material';
 import { AspectRatio, OutputFormat } from '../../ts/types';
 
-const GenerateImageCoreForm = () => {
+const GenerateCoreForm = () => {
     const [value, setValue] = useState<GenerateCoreParams>({
         prompt: "",
         outputFormat: OutputFormat.PNG,
@@ -14,7 +14,7 @@ const GenerateImageCoreForm = () => {
     });
 
     return (
-        <GenerateImageForm value={value} onChange={r => setValue(r)} onSend={generateCore} >
+        <GenerateForm value={value} onChange={r => setValue(r)} onSend={generateCore} >
             <Stack
                 spacing={{ xs: 2, sm: 1 }}
                 direction={{ xs: 'column', sm: 'row' }}
@@ -35,8 +35,8 @@ const GenerateImageCoreForm = () => {
                     </Select>
                 </FormControl>
             </Stack>
-        </GenerateImageForm>
+        </GenerateForm>
     )
 }
 
-export default GenerateImageCoreForm;
+export default GenerateCoreForm;

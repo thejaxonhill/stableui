@@ -1,5 +1,5 @@
 import '@testing-library/jest-dom'
-import { validateGenerateParams } from '../components/generate/GenerateImageForm'
+import { validateGenerateParams } from '../components/generate/GenerateForm'
 import { GenerateParams } from '../ts/client/generate';
  
 describe(validateGenerateParams, () => {

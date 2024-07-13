@@ -6,13 +6,13 @@ import { GenerateSD3Params, SD3Model, generateSD3 } from '../../ts/client/genera
 import { useRouter } from '../../ts/nextjs/navigation';
 import { AspectRatio, OutputFormat } from '../../ts/types';
 import { ImageInput, TitledImageDisplay, TitledSlider } from '../common';
-import GenerateImageForm from "./GenerateImageForm";
+import GenerateForm from "./GenerateForm";
 
 type GenerateImageSD3FormProps = {
     model?: SD3Model;
 }
 
-const GenerateImageSD3Form = ({ model = 'sd3-medium' }: GenerateImageSD3FormProps) => {
+const GenerateSD3Form = ({ model = 'sd3-medium' }: GenerateImageSD3FormProps) => {
     const router = useRouter();
     const [value, setValue] = useState<GenerateSD3Params>({
         prompt: "",
@@ -23,7 +23,7 @@ const GenerateImageSD3Form = ({ model = 'sd3-medium' }: GenerateImageSD3FormProp
     });
 
     return (
-        <GenerateImageForm
+        <GenerateForm
             value={value}
             onChange={r => setValue(r)}
             onSend={generateSD3} >
@@ -70,8 +70,8 @@ const GenerateImageSD3Form = ({ model = 'sd3-medium' }: GenerateImageSD3FormProp
                         onChange={(e, v) => setValue({ ...value, strength: v as number })} />
                 </Box>
             }
-        </GenerateImageForm>
+        </GenerateForm>
     )
 }
 
-export default GenerateImageSD3Form;
+export default GenerateSD3Form;

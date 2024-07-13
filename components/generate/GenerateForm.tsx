@@ -21,7 +21,7 @@ type GenerateImageFormProps<T extends GenerateParams> = {
     onSend: (params: T) => Promise<File | string>;
 }
 
-const GenerateImageForm = ({
+const GenerateForm = ({
     children,
     value: params = {
         prompt: "",
@@ -95,4 +95,4 @@ const GenerateImageForm = ({
     )
 }
 
-export default GenerateImageForm;
+export default GenerateForm;

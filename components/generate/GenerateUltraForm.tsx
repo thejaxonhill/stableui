@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { GenerateCoreParams, generateUltra } from '../../ts/client/generate';
-import GenerateImageForm from "./GenerateImageForm";
+import GenerateForm from "./GenerateForm";
 import { AspectRatio, OutputFormat } from '../../ts/types';
 
-const GenerateImageUltraForm = () => {
+const GenerateUltraForm = () => {
     const [value, setValue] = useState<GenerateCoreParams>({
         prompt: "",
         outputFormat: OutputFormat.PNG,
@@ -13,8 +13,8 @@ const GenerateImageUltraForm = () => {
     });
 
     return (
-        <GenerateImageForm value={value} onChange={r => setValue(r)} onSend={generateUltra} />
+        <GenerateForm value={value} onChange={r => setValue(r)} onSend={generateUltra} />
     )
 }
 
-export default GenerateImageUltraForm;
+export default GenerateUltraForm;
