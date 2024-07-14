@@ -113,6 +113,28 @@ export const outpaint = async ({
     .then(mapImageToImage(image!, outputFormat))
 }
 
+export type RemoveBackgroundParams = {
+    image?: File;
+    outputFormat?: OutputFormat;
+};
+
+export const removeBackground = async ({
+    image,
+    outputFormat,
+}: RemoveBackgroundParams) => {
+    const formData = new FormData();
+    formData.setIfPresent("image", image);
+    formData.setIfPresent("output_format", outputFormat?.valueOf());
+    
+    return await fetch("/api/edit/remove-background", {
+        body: formData,
+        method: 'post',
+        headers: { "Accept": "image/*" }
+    })
+    .then(checkResponse)
+    .then(mapImageToImage(image!, outputFormat));
+}
+
 export type SearchAndReplaceParams = {
     prompt: string;
     searchPrompt: string
