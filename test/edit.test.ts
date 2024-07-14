@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-import { erase, EraseParams, inpaint, InpaintParams, outpaint, OutpaintParams, searchAndReplace, SearchAndReplaceParams } from "../ts/client/edit";
+import { erase, EraseParams, inpaint, InpaintParams, outpaint, OutpaintParams, removeBackground, RemoveBackgroundParams, searchAndReplace, SearchAndReplaceParams } from "../ts/client/edit";
 import { ExtendedFormData } from "../ts/components/extended-formdata";
 import { OutputFormat } from "../ts/types";
 import { mockFetch } from "./shared/mock-fetch";
@@ -125,5 +125,26 @@ describe(searchAndReplace, () => {
         expect(body.has('prompt')).toBeTruthy();
         expect(body.has('search_prompt')).toBeTruthy();
         expect(body.has('seed')).toBeTruthy();
+    })
+});
+
+describe(removeBackground, () => {
+    it('when removeBackground then formData is set correctly', async () => {
+        const params: RemoveBackgroundParams = {
+            image: new File([], 'test.png'),
+            outputFormat: OutputFormat.PNG,
+        };
+        
+        await removeBackground(params);
+
+        expect(mockFetch).toHaveBeenCalledWith('/api/edit/remove-background',  expect.objectContaining({
+                body: expect.any(ExtendedFormData),
+                method: 'post',
+                headers: { "Accept": "image/*" }
+            }))
+
+        const body: any = mockFetch.mock.calls[4][1]?.body;
+        expect(body.has('image')).toBeTruthy();
+        expect(body.has('output_format')).toBeTruthy();
     })
 });
