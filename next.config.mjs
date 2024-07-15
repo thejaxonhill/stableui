@@ -6,6 +6,10 @@ const nextConfig = {
     async rewrites() {
         return [
             {
+                source: '/api/control/:path*',
+                destination: process.env.STABILITY_HOST + '/v2beta/stable-image/control/:path*', // The :path parameter isn't used here so will be automatically passed in the query
+            },
+            {
                 source: '/api/edit/:path*',
                 destination: process.env.STABILITY_HOST + '/v2beta/stable-image/edit/:path*', // The :path parameter isn't used here so will be automatically passed in the query
             },
