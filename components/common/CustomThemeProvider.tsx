@@ -7,8 +7,12 @@ import { CssBaseline } from "@mui/material";
 const lightTheme = createTheme({
     palette: {
         primary: {
-            main: '#6366F1'
-        }
+            main: '#6366F1',
+
+        },
+        background: {
+            paper: '#6366F1',
+        },
     },
     typography: {
         fontFamily: 'inherit',

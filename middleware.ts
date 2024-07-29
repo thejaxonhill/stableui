@@ -1,14 +1,20 @@
-import { withAuth } from "next-auth/middleware"
+import { auth } from "@/auth"
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import CryptoJs from 'crypto-js';
 
 const secret = process.env.NEXTAUTH_SECRET!
 
-export default withAuth(function middleware(request: NextRequest) {
-    const {pathname} = request.nextUrl;
-    const requestHeaders = new Headers(request.headers);
+export default auth((req) => {
+    const {auth, headers, nextUrl} = req;
+    const {pathname, origin} = nextUrl;
 
+    if (!auth && pathname !== "/login") {
+        const newUrl = new URL("/login", origin)
+        return Response.redirect(newUrl);
+    }
+
+    const requestHeaders = new Headers(headers);
     if(pathname.includes('api')) {
         const encryptedApiKey = cookies().get('external-id')?.value;
         const apiKey = encryptedApiKey

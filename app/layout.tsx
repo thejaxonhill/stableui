@@ -1,16 +1,20 @@
-import { Roboto_Mono } from 'next/font/google'
+import { Roboto, Roboto_Mono } from 'next/font/google'
 import { Container } from "@mui/material";
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
 import { ApiKeyDialog, GlobalAlertHandler, Provider } from "../components/common";
 import Navbar from "../components/navbar/Navbar";
 import { cookies } from "next/headers";
-import CryptoJs from 'crypto-js';
 import CustomThemeProvider from '../components/common/CustomThemeProvider';
+import { auth } from '@/auth';
 
-const secret = process.env.NEXTAUTH_SECRET!
+export const robotoMono = Roboto_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+})
 
-const roboto = Roboto_Mono({
+export const roboto = Roboto({
+  weight: ['500'],
+  style: ['normal', 'italic'],
   subsets: ['latin'],
   display: 'swap',
 })
@@ -24,7 +28,7 @@ export const metadata: Metadata = {
 
 const RootLayout = async ({ children }: Readonly<{ children: React.ReactNode }>) => {
   const hasKey = cookies().has('external-id');
-  const session = await getServerSession();
+  const session = await auth();
 
   return (
     <Provider
@@ -33,7 +37,7 @@ const RootLayout = async ({ children }: Readonly<{ children: React.ReactNode }>)
       refetchOnWindowFocus={true}
     >
       <CustomThemeProvider>
-        <html className={roboto.className}>
+        <html className={robotoMono.className} >
           <ApiKeyDialog hasKey={hasKey} />
           <body>
             <Navbar session={session} />
