@@ -45,7 +45,7 @@ const Login = async () => {
                         style={{ margin: 'auto' }} />
                     <Typography sx={{ textAlign: 'center' }}>Log in to Stable UI to start prompting</Typography>
                     <Stack direction='column' spacing={2} >
-                        {providers.map(provider => <ProviderSignInButton {...provider} />)}
+                        {providers.map(provider => <ProviderSignInButton key={provider.id} {...provider} />)}
                         <Divider>or</Divider>
                         <ContinueWithEmailForm />
                     </Stack>
