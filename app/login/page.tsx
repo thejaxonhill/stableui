@@ -1,12 +1,12 @@
-import { Box, Button, Divider, Paper, Stack, TextField, Typography } from "@mui/material";
+import { Box, Divider, Paper, Stack, Typography } from "@mui/material";
 import { Metadata } from "next";
 import Image from "next/image";
+import ContinueWithEmailForm from "../../components/login/ContinueWithEmailForm";
 import ProviderSignInButton from "../../components/login/ProviderSignInButton";
 import stableuiLogo from "../../public/static/images/icon.png";
 import discordLogo from "../../public/static/images/providers/discord-mark-blue.png";
 import googleLogo from "../../public/static/images/providers/google-logo.png";
 import { roboto } from "../layout";
-import ContinueWithEmailForm from "../../components/login/ContinueWithEmailForm";
 
 export const metadata: Metadata = {
     title: 'Stable UI - Login'
@@ -43,7 +43,7 @@ const Login = async () => {
                         height={200}
                         width={200}
                         style={{ margin: 'auto' }} />
-                    <Typography sx={{ textAlign: 'center' }}>Log in to Stable UI to use platform</Typography>
+                    <Typography sx={{ textAlign: 'center' }}>Log in to Stable UI to start prompting</Typography>
                     <Stack direction='column' spacing={2} >
                         {providers.map(provider => <ProviderSignInButton {...provider} />)}
                         <Divider>or</Divider>

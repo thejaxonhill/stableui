@@ -17,6 +17,7 @@
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.18",
     "@prisma/client": "^5.17.0",
+    "@vercel/speed-insights": "^1.0.12",
     "crypto-js": "^4.2.0",
     "email-validator": "^2.0.4",
     "next": "14.2.3",

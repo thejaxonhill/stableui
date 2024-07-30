@@ -33,7 +33,6 @@ const ProviderSignInButton = ({ key, id, name, iconHref }: ProviderSignInButtonP
                 '&:hover': {
                     backgroundColor: theme.palette.mode === 'dark' ? 'inherit' : '#cac9fa'
                 },
-                minWidth: 250,
                 textTransform: 'none',
                 border: theme.palette.mode === 'dark' ? 1 : 0
             }}>

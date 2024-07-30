@@ -6,6 +6,7 @@ import Navbar from "../components/navbar/Navbar";
 import { cookies } from "next/headers";
 import CustomThemeProvider from '../components/common/CustomThemeProvider';
 import { auth } from '@/auth';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const robotoMono = Roboto_Mono({
   subsets: ['latin'],
@@ -47,6 +48,7 @@ const RootLayout = async ({ children }: Readonly<{ children: React.ReactNode }>)
                 {children}
               </Container>
             </main>
+            <SpeedInsights />
           </body>
         </html>
       </CustomThemeProvider>

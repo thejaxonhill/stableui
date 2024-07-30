@@ -1,8 +1,8 @@
 "use client"
 import { Box, Button, Stack, TextField, Typography, useTheme } from "@mui/material";
+import validator from 'email-validator';
 import { signIn } from "next-auth/react";
-import { useMemo, useState } from "react";
-import validator from 'email-validator'
+import { useState } from "react";
 
 const ContinueWithEmailForm = () => {
     const theme = useTheme();
@@ -15,6 +15,7 @@ const ContinueWithEmailForm = () => {
                 <Typography sx={{ color: 'white' }} >Email:</Typography>
                 <TextField
                     fullWidth
+                    size="small"
                     placeholder='username@example.com'
                     error={!validEmail}
                     value={email}
@@ -42,7 +43,6 @@ const ContinueWithEmailForm = () => {
                     },
                     backgroundColor: theme.palette.mode === 'dark' ? 'inherit' : 'white',
                     height: 40,
-                    minWidth: 250,
                     textTransform: 'none',
                     border: theme.palette.mode === 'dark' ? 1 : 0
                 }}>
