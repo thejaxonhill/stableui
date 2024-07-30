@@ -17,7 +17,7 @@ const ProviderSignInButton = ({ key, id, name, iconHref }: ProviderSignInButtonP
     return (
         <Button
             key={key}
-            onClick={() => signIn(id)}
+            onClick={() => signIn(id, { callbackUrl: '/' })}
             size="large"
             startIcon={
                 <Image
