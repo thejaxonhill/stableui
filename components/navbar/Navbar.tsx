@@ -130,9 +130,12 @@ const Navbar = ({ session }: NavbarProps) => {
                 open={drawerOpen}
                 anchor="left"
                 hideBackdrop
-                sx={{
-                    backgroundColor: theme.palette.mode === 'dark' ? 'inherit' : '#fff'
+                PaperProps={{
+                    sx: {
+                        background: theme.palette.mode === 'dark' ? theme.palette.background.paper : '#fff'
+                    }
                 }}
+
             >
                 <Toolbar >
                     <Stack spacing={2} direction='row'>
