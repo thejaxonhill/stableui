@@ -9,7 +9,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FitScreenIcon from '@mui/icons-material/FitScreen';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import MenuIcon from '@mui/icons-material/Menu';
-import { AppBar, Box, Collapse, Divider, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Collapse, Divider, Drawer, IconButton, List, ListItemButton, ListItemIcon, ListItemText, Stack, Toolbar, Typography, useTheme } from "@mui/material";
 import { Session } from "next-auth";
 import Link from 'next/link';
 import { useEffect, useState } from "react";
@@ -99,6 +99,7 @@ type NavbarProps = {
 
 const Navbar = ({ session }: NavbarProps) => {
     const { pathname } = useRouter();
+    const theme = useTheme()
     const [open, setOpen] = useState<number | null>(null);
     const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -129,6 +130,9 @@ const Navbar = ({ session }: NavbarProps) => {
                 open={drawerOpen}
                 anchor="left"
                 hideBackdrop
+                sx={{
+                    backgroundColor: theme.palette.mode === 'dark' ? 'inherit' : '#fff'
+                }}
             >
                 <Toolbar >
                     <Stack spacing={2} direction='row'>

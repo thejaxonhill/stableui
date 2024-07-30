@@ -1,6 +1,6 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { Metadata } from "next";
-import { getServerSession } from "next-auth";
+import { auth } from "@/auth"
 
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 }
 
 const Home = async () => {
-  const session = await getServerSession();
+  const session = await auth();
   if (session)
     redirect('/generate/sd3');
 

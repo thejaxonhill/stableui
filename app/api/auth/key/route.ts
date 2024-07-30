@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server"
 import { cookies } from "next/headers";
 import CryptoJs from 'crypto-js';
-import { getServerSession } from "next-auth";
+import { auth } from "@/auth";
 
 const secret = process.env.NEXTAUTH_SECRET!;
 const thirtyDays = 30 * 24 * 60 * 60 * 1000;
@@ -9,7 +9,7 @@ const thirtyDays = 30 * 24 * 60 * 60 * 1000;
 export async function POST(request: NextRequest) {
     const apiKey = request.headers.get("Authorization");
     const cookiesStore = cookies();
-    const session = await getServerSession();
+    const session = await auth();
     
     return await fetch(process.env.STABILITY_HOST! + '/v1/user/account', {
       headers: {'Authorization': apiKey??''}
