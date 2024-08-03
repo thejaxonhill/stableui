@@ -7,9 +7,11 @@ import stableuiLogo from "../../public/static/images/icon.png";
 import discordLogo from "../../public/static/images/providers/discord-mark-blue.png";
 import googleLogo from "../../public/static/images/providers/google-logo.png";
 import { roboto } from "../layout";
+import { ThemedPaper } from "../../components/common";
 
 export const metadata: Metadata = {
-    title: 'Stable UI - Login'
+    title: 'Stable UI - Login',
+    description: `Log in to Stable UI to begin generating images with Stable Diffusion 3 using Stability AI's v2beta REST API.`
 }
 
 const providers = [
@@ -35,7 +37,9 @@ const Login = async () => {
                 alignItems: 'center',
                 justifyContent: 'center',
             }}>
-            <Paper sx={{ p: 5, color: '#fff' }}>
+            <ThemedPaper
+                light={{ backgroundColor: '#6366F1' }}
+                sx={{ p: 5, color: '#fff' }}>
                 <Stack direction='column' spacing={2} sx={{ mx: 'auto' }}>
                     <Image
                         alt='StableUI Logo'
@@ -50,7 +54,7 @@ const Login = async () => {
                         <ContinueWithEmailForm />
                     </Stack>
                 </Stack>
-            </Paper>
+            </ThemedPaper>
         </Box>
     )
 }

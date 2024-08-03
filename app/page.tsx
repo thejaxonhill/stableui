@@ -6,13 +6,13 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: 'Stable UI - Home'
+  title: 'Stable UI - Home',
+  description: `Generate images using Stable Diffusion 3 and access the latest tools from Stability AI's v2beta REST API.`
 }
 
 const Home = async () => {
   const session = await auth();
-  if (session)
-    redirect('/generate/sd3');
+  if (session) redirect('/generate/sd3');
 
   return (
     <Box sx={{ mt: 5 }}>

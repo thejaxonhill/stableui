@@ -129,14 +129,7 @@ const Navbar = ({ session }: NavbarProps) => {
                 variant='persistent'
                 open={drawerOpen}
                 anchor="left"
-                hideBackdrop
-                PaperProps={{
-                    sx: {
-                        background: theme.palette.mode === 'dark' ? theme.palette.background.paper : '#fff'
-                    }
-                }}
-
-            >
+                hideBackdrop>
                 <Toolbar >
                     <Stack spacing={2} direction='row'>
                         <Typography variant="h4" >
@@ -187,11 +180,14 @@ const Navbar = ({ session }: NavbarProps) => {
                 <Box sx={{ display: 'flex', alignItems: 'end', height: '100%' }}>
                     <Box sx={{ width: '100%', p: 1, textAlign: 'center' }}>
                         <Divider />
-                        <Box sx={{ mt: 1 }}>
+                        <Stack sx={{ mt: 1 }}>
                             <Link href='/privacy' style={{ color: 'inherit' }}>
                                 Privacy policy
                             </Link>
-                        </Box>
+                            <Link href='/terms-of-service' style={{ color: 'inherit' }}>
+                                Terms of Service
+                            </Link>
+                        </Stack>
                     </Box>
                 </Box>
             </Drawer >

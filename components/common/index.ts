@@ -11,6 +11,7 @@ import SeedField from "./SeedField";
 import SignInButton from "./SignInButton";
 import SignOutMenuItem from "./SignOutMenuItem";
 import SubmitButton from "./SubmitButton";
+import ThemedPaper from "./ThemedPaper";
 import TitleCard from "./TitleCard";
 import TitledImageDisplay from "./TitledImageDisplay";
 import TitledSlider from "./TitledSlider";
@@ -30,6 +31,7 @@ export {
     SignInButton,
     SignOutMenuItem,
     SubmitButton,
+    ThemedPaper,
     TitleCard,
     TitledImageDisplay,
     TitledSlider,

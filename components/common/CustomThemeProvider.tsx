@@ -10,9 +10,6 @@ const lightTheme = createTheme({
             main: '#6366F1',
 
         },
-        background: {
-            paper: '#6366F1',
-        },
     },
     typography: {
         fontFamily: 'inherit',
