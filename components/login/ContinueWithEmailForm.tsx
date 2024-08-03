@@ -19,8 +19,12 @@ const ContinueWithEmailForm = () => {
                     placeholder='username@example.com'
                     error={!validEmail}
                     value={email}
-                    helperText={email && !validEmail ? 'Please enter a valid email.' : undefined}
-                    onChange={e => setEmail(e.target.value)}
+                    helperText={!validEmail ? 'Please enter a valid email.' : undefined}
+                    onChange={e => {
+                        setEmail(e.target.value)
+                        if (!validEmail)
+                            setValidEmail(true)
+                    }}
                     sx={{
                         '& .MuiOutlinedInput-root': {
                             backgroundColor: theme.palette.mode === 'dark' ? 'inherit' : 'white',
