@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
     title: 'Stable UI - Terms of Service'
@@ -12,7 +13,7 @@ const TermsOfService = async () => {
             <p><em>Last Updated: August 3rd, 2024</em></p>
 
             <h2>Introduction</h2>
-            <p>{'Welcome to Stable UI ("we," "our," "us"). These Terms of Service ("Terms") govern your use of our website and services at <a href="https://stableui.io">https://stableui.io</a> (the "Service"). By accessing or using the Service, you agree to be bound by these Terms. If you do not agree to these Terms, do not use the Service.'}</p>
+            <p>{'Welcome to Stable UI ("we," "our," "us"). These Terms of Service ("Terms") govern your use of our website and services at'} <Link href="https://stableui.io">https://stableui.io</Link> {'(the "Service"). By accessing or using the Service, you agree to be bound by these Terms. If you do not agree to these Terms, do not use the Service.'}</p>
 
             <h2>Eligibility</h2>
             <p>You must be at least 18 years old to use the Service. By using the Service, you represent and warrant that you meet this requirement.</p>
