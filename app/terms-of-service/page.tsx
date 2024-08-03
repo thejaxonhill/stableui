@@ -13,7 +13,7 @@ const TermsOfService = async () => {
             <p><em>Last Updated: August 3rd, 2024</em></p>
 
             <h2>Introduction</h2>
-            <p>{'Welcome to Stable UI ("we," "our," "us"). These Terms of Service ("Terms") govern your use of our website and services at'} <Link href="https://stableui.io">https://stableui.io</Link> {'(the "Service"). By accessing or using the Service, you agree to be bound by these Terms. If you do not agree to these Terms, do not use the Service.'}</p>
+            <p>{'Welcome to Stable UI ("we," "our," "us"). These Terms of Service ("Terms") govern your use of our website and services at'} <Link href="https://stableui.io" style={{ color: 'inherit' }}>https://stableui.io</Link> {'(the "Service"). By accessing or using the Service, you agree to be bound by these Terms. If you do not agree to these Terms, do not use the Service.'}</p>
 
             <h2>Eligibility</h2>
             <p>You must be at least 18 years old to use the Service. By using the Service, you represent and warrant that you meet this requirement.</p>
@@ -30,7 +30,7 @@ const TermsOfService = async () => {
             </ul>
 
             <h2>Third-Party Services</h2>
-            <p>Our Service may integrate with third-party services, including Stability AI. By using these integrated services, you agree to adhere to Stability AI&apos;s Terms of Service, which can be found at <a href="https://platform.stability.ai/legal/terms-of-service">https://platform.stability.ai/legal/terms-of-service</a>. We are not responsible for the content, policies, or practices of third-party services.</p>
+            <p>Our Service may integrate with third-party services, including Stability AI. By using these integrated services, you agree to adhere to Stability AI&apos;s Terms of Service, which can be found at <Link href="https://platform.stability.ai/legal/terms-of-service" style={{ color: 'inherit' }}>https://platform.stability.ai/legal/terms-of-service</Link>. We are not responsible for the content, policies, or practices of third-party services.</p>
 
             <h2>Intellectual Property</h2>
             <p>The Service and its original content, features, and functionality are and will remain the exclusive property of Stable UI and its licensors. The Service is protected by copyright, trademark, and other laws of both the United States and foreign countries.</p>
